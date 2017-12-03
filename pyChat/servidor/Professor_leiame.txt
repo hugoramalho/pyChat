@@ -1,0 +1,4 @@
+O arquivo servidor_tcp é um servidor simples, que não faz uso de threads, e não aceita muitiplos clientes.
+Foi o primeiro a ser feito, extendi o desenvolvimento para uso de threads. 
+O mantive no programa para testes de uso com vs sem threads.
+Protanto, execute o servidor_tcp_thread.
