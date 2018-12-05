@@ -22,7 +22,7 @@ class UserMapper(DataMapper):
         if feedback == 0:
             newUser = self.searchUser(user.userEmail)
             tableName = 'friends_' + str(newUser.idd)
-            sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id_friend INTEGER, FOREIGN KEY(id_friend) REFERENCES users(id));'
+            sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id_friend INTEGER UNIQUE, FOREIGN KEY(id_friend) REFERENCES users(id));'
             feedback = self.__execute_commit__(sql)
 
             if feedback == 0:
@@ -135,6 +135,7 @@ class UserMapper(DataMapper):
                 tableName = 'friends_'+str(userId)
                 sql = 'INSERT INTO ' + tableName + ' VALUES (' + str(id_friend) + ');'
                 feedback = self.__execute_commit__(sql)
+
                 if isinstance(feedback, Exception):
                     return feedback
 
@@ -142,7 +143,10 @@ class UserMapper(DataMapper):
                 tableName = 'friends_'+str(id_friend)
                 sql = 'INSERT INTO ' + tableName + ' VALUES (' + str(userId) + ');'
                 feedback = self.__execute_commit__(sql)
+                print('Era pra ser Except: -> ' + str(type(feedback)))
+
                 if isinstance(feedback, Exception):
+                    print('Era pra ser Except: -> ' + str(type(feedback)))
                     return feedback
 
                 #É criada uma tabela de Chat:

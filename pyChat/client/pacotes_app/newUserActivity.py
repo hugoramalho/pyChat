@@ -1,5 +1,6 @@
+from pyChat.client.Models import Models
 from pyChat.client.pacotes_app.UIElements.Frames import novo_user_ui
-from . import Models
+
 
 class novo_user_frame(novo_user_ui):
     def __init__(self, frame_pai, sessao_atv):
@@ -43,7 +44,7 @@ class novo_user_frame(novo_user_ui):
         else:
             self.sessao_atv.new_user(user)
 
-    def new_user_ok(self, user:Models.user):
+    def new_user_ok(self, user: Models.user):
             self.entr1.limpa_entr()
             self.entr2.limpa_entr()
             self.entr3.limpa_entr()

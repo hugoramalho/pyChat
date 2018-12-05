@@ -28,7 +28,7 @@ class sqliteConn:
                 raise Exception('Conexão indisponível ou já em uso')
                 pass
         except Exception as Expt:
-            self.__expt_msg__(Expt)
+            return self.__expt_msg__(Expt)
 
     def __disconect_BD__(self):
         self.con_status = False
@@ -42,7 +42,7 @@ class sqliteConn:
             self.__disconect_BD__()  # Conexão fechada com o BD!
             return (elem)
         except Exception as Expt:
-            self.__expt_msg__(Expt)
+            return self.__expt_msg__(Expt)
 
     def __lastrowid__(self):
         return (self.cursor.lastrowid)
@@ -55,7 +55,22 @@ class sqliteConn:
             self.__disconect_BD__()  # Conexão fechada com o BD!
             return elem
         except Exception as Expt:
-            self.__expt_msg__(Expt)
+            return self.__expt_msg__(Expt)
+
+    def __execute_transaction__(self, sql, tpl=''):
+        self.__conect_BD__()  # Conexão aberta com o BD!
+        try:
+            if tpl == '':
+                #EXECUTAR A TRANSAÇÃO SEM TUPLA
+                pass
+            else:
+                self.cursor.execute(sql, tpl)
+            lst = self.cursor.fetchall()
+            self.__disconect_BD__()  # Conexão fechada com o BD!
+            return (lst)
+        except Exception as Expt:
+            return self.__expt_msg__(Expt)
+
 
     def __select_fetchall__(self, sql, tpl=''):
         self.__conect_BD__()  # Conexão aberta com o BD!
@@ -66,9 +81,9 @@ class sqliteConn:
                 self.cursor.execute(sql, tpl)
             lst = self.cursor.fetchall()
             self.__disconect_BD__()  # Conexão fechada com o BD!
-            return (lst)
+            return lst
         except Exception as Expt:
-            self.__expt_msg__(Expt)
+            return self.__expt_msg__(Expt)
 
     def __execute_fetchall__(self, sql, tpl=''):
         self.__conect_BD__()  # Conexão aberta com o BD!
@@ -81,7 +96,7 @@ class sqliteConn:
             self.__disconect_BD__()  # Conexão fechada com o BD!
             return (lst)
         except Exception as Expt:
-            self.__expt_msg__(Expt)
+            return self.__expt_msg__(Expt)
 
     def __execute_commit__(self, sql='', tpl=''):
         self.__conect_BD__()  # Conexão aberta com o BD!
@@ -94,7 +109,7 @@ class sqliteConn:
             self.__disconect_BD__()  # Conexão fechada com o BD!
             return 0
         except Exception as Expt:
-            self.__expt_msg__(Expt)
+            return self.__expt_msg__(Expt)
 
     def __strip_id__(self, idd, tipo='int'):
         idd = str(idd)
@@ -116,4 +131,5 @@ class sqliteConn:
         self.finaliza_conexao()
         print(str(Expt))
         print(type(Expt))
+        print('É do tipo Except? -> '+str(isinstance(Expt, Exception)))
         return Expt

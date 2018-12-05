@@ -1,7 +1,7 @@
 from datetime import datetime
 
+from pyChat.client.Models import Models
 from pyChat.client.pacotes_app.UIElements.Frames import chat_frame_ui
-from . import Models
 
 
 class chat_frame(chat_frame_ui):
@@ -32,7 +32,7 @@ class chat_frame(chat_frame_ui):
     def __add_contato__(self):
         self.sessao_atv.raiseFrame('addFriend_frame')
 
-    def setContatos(self, lstUser:Models.LstUsers):
+    def setContatos(self, lstUser: Models.LstUsers):
         print(lstUser)
         self.userFriendsList = lstUser
         self.contatos_treeview.clear_treeView()
@@ -47,12 +47,12 @@ class chat_frame(chat_frame_ui):
     def __raise_sobre__(self):
         self.sessao_atv.raiseFrame('sobre_frame')
 
-    def carrega_msg(self, lstMessage:Models.LstMessages):
+    def carrega_msg(self, lstMessage: Models.LstMessages):
         self.lst_conversa_atv = lstMessage
         self.conversa_treeview.clear_treeView()
         self.conversa_treeview.insert_lst_treeView(self.lst_conversa_atv.toTreeview())
 
-    def addFriendList(self, friend:Models.user):
+    def addFriendList(self, friend: Models.user):
         self.sessao_atv.retrieve_friends()
 
 
@@ -99,7 +99,7 @@ class chat_frame(chat_frame_ui):
             self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
 
 
-    def append_msg(self, message:Models.Message):
+    def append_msg(self, message: Models.Message):
         if message.recipId == self.sessao_atv.userAct.idd:
             print(' caiu aqui eja')
             self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())

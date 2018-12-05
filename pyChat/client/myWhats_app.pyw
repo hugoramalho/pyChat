@@ -8,11 +8,12 @@
 from tkinter import *
 from tkinter import messagebox
 
-from pyChat.client.pacotes_app import Models
+from pyChat.client.cliente_tcp.cliente_tcp import *
 from pyChat.client.pacotes_app.chatActivity import *
 from pyChat.client.pacotes_app.loginActivity import *
 from pyChat.client.pacotes_app.newUserActivity import *
-from pyChat.client.cliente_tcp.cliente_tcp import *
+from pyChat.client.pacotes_app.addFriendActivity import *
+
 #from pacotes_app import Models
 
 
@@ -164,24 +165,25 @@ class sessao(Tk):
                 if friend.idd == self.userAct.idd:
                     pass
                 else:
+                    self.frames['addFriend_frame'].addFriendOk(friend)
                     self.frames['chat_frame'].addFriendList(friend)
             else:
                 messagebox.showwarning('Erro', request['errorName'])
 
 
-    def login(self, login:Models.Login):
+    def login(self, login: Models.Login):
         dictRequest=login.toJson()
         dictRequest['request'] = 'login'
         self.con.envia_req(dictRequest)
 
 
-    def new_user(self, user:Models.user):
+    def new_user(self, user: Models.user):
         dictRequest = user.toJson()
         dictRequest['request'] = 'new_user'
         self.con.envia_req(dictRequest)
 
 
-    def retrieve_chat(self, userFriend:Models.user):
+    def retrieve_chat(self, userFriend: Models.user):
         friendId = userFriend.idd
         userId = self.userAct.idd
 
@@ -196,7 +198,7 @@ class sessao(Tk):
         # Envia e recebe feedback do servidor:
         self.con.envia_req(dictRequest)
 
-    def send_message(self, message:Models.Message):
+    def send_message(self, message: Models.Message):
         dictRequest = message.toJson()
         dictRequest['request']= 'send_message'
         # Envia e recebe feedback do servidor:

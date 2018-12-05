@@ -2,7 +2,6 @@ import socketserver
 import json
 import threading
 
-
 from pyChat.servidor.bd_server.Handler import *
 from pyChat.servidor.bd_server import DTP
 
