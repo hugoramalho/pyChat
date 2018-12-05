@@ -169,6 +169,8 @@ class sessao(Tk):
                     self.frames['chat_frame'].addFriendList(friend)
             else:
                 messagebox.showwarning('Erro', request['errorName'])
+                self.frames['addFriend_frame'].update()
+                self.frames['addFriend_frame'].deiconify()
 
 
     def login(self, login: Models.Login):

@@ -45,7 +45,7 @@ class sqliteConn:
             return self.__expt_msg__(Expt)
 
     def __lastrowid__(self):
-        return (self.cursor.lastrowid)
+        return self.cursor.lastrowid
 
     def __execute_fetchone__(self, sql):
         self.__conect_BD__()  # Conexão aberta com o BD!

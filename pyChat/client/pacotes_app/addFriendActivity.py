@@ -22,7 +22,12 @@ class addFrame_ui(Frames.AddFriendFrame):
     def addFriendOk(self, user: Models.user):
         self.entr_email.delete(0, 'end')
         messagebox.showinfo('Novo contato','Usuário adicionado com sucesso!\nNome: ' + user.userName + '\nEmail: ' + user.userEmail)
+        self.update()
+        self.deiconify()
+
 
     def addFriendNotOk(self):
         self.entr_email.limpa_entr()
         messagebox.showinfo('Novo contato','Usuário não encontrado!\nEmail: ' + self.friendEmail)
+        self.update()
+        self.deiconify()

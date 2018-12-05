@@ -81,6 +81,7 @@ class login_ui(Frame):
 class novo_user_ui(Frame):
     def __init__(self, framePai, **kwargs):
         super().__init__(framePai)
+        self.update()
         #Bloco (2.1): Abaixo, é declarado o frame que conterá o menu. O frame está contido no frame-pai:
         #~ self.grid(sticky = E+W+S+N, padx = 25)
 
@@ -233,6 +234,9 @@ class chat_frame_ui(Frame):
 class ajuda_frame_ui(Toplevel):
     def __init__(self):
         super().__init__()
+        self.update()
+        self.deiconify()
+        self.resizable(False, False)
         self.titulo = Label(self, text = 'Ajuda')
         self.titulo.grid(row = 0, column = 0, sticky = E+W)
 
@@ -267,6 +271,9 @@ class ajuda_frame_ui(Toplevel):
 class sobre_frame_ui(Toplevel):
     def __init__(self):
         super().__init__()
+        self.update()
+        self.deiconify()
+        self.resizable(False, False)
         self.titulo = Label(self, text = 'Sobre')
         self.titulo.grid(row = 0, column = 0, sticky = E+W)
 
@@ -295,6 +302,10 @@ class sobre_frame_ui(Toplevel):
 class AddFriendFrame(Toplevel):
     def __init__(self):
         super().__init__(padx= 20,pady=20)
+        self.update()
+        self.deiconify()
+        self.resizable(False, False)
+
         self.titulo = Label(self, text = 'Adicionar contato')
         self.titulo.grid(row = 0, column = 0, sticky = N+E+W)
 
