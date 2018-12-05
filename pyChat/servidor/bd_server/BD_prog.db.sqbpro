@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="F:/outros/trab_redes/BD_prog.db"/><window><current_tab id="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1323"/><expanded_item id="0" parent="-1"/><expanded_item id="1" parent="-1"/><expanded_item id="2" parent="-1"/><expanded_item id="3" parent="-1"/></tab_structure><tab_browse><current_table name="mensagens"/><default_encoding codec=""/><browsetable_info data="AAAAAgAAABAAdQBzAHUAYQByAGkAbwBzctJD0AAAAjcAAAAAAAAAAAAAAAAA/////wAAABIAbQBlAG4AcwBhAGcAZQBuAHN1+eLAAAACNwAAAAAAAAABAAAAAQAAAAAAAAAAAP////8="/></tab_browse><tab_sql><sql name="SQL 1">
-
-INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('Ola!', 2, 1, '2017-11-18 04:28:15.778495');
-INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('oi!', 1, 2, '2017-11-18 04:28:17.033973');
-INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('Tudo bem?', 2, 1, '2017-11-18 04:28:17.690275');
-INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('sim!', 1, 2, '2017-11-18 04:28:18.218922');
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="F:/outros/trab_redes/BD_prog.db"/><window><current_tab id="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1323"/><expanded_item id="0" parent="-1"/><expanded_item id="1" parent="-1"/><expanded_item id="2" parent="-1"/><expanded_item id="3" parent="-1"/></tab_structure><tab_browse><current_table userName="mensagens"/><default_encoding codec=""/><browsetable_info data="AAAAAgAAABAAdQBzAHUAYQByAGkAbwBzctJD0AAAAjcAAAAAAAAAAAAAAAAA/////wAAABIAbQBlAG4AcwBhAGcAZQBuAHN1+eLAAAACNwAAAAAAAAABAAAAAQAAAAAAAAAAAP////8="/></tab_browse><tab_sql><sql userName="SQL 1">
+
+
+
+INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('Ola!', 2, 1, '2017-11-18 04:28:15.778495');
+
+INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('oi!', 1, 2, '2017-11-18 04:28:17.033973');
+
+INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('Tudo bem?', 2, 1, '2017-11-18 04:28:17.690275');
+
+INSERT INTO mensagens(conteudo, id_dest, id_remete, data_hora) VALUES ('sim!', 1, 2, '2017-11-18 04:28:18.218922');
+
 </sql><current_tab id="0"/></tab_sql></sqlb_project>

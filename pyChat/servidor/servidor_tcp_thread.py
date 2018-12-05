@@ -1,8 +1,10 @@
 import socketserver
 import json
 import threading
-from bd_server import server_requests as request
 
+
+from pyChat.servidor.bd_server.Handler import *
+from pyChat.servidor.bd_server import DTP
 
 
 class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
@@ -23,67 +25,59 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             # Abaixo, é obtido o tipo do dado entrante:
             try:
                 print(self.dado)
-                req = self.dado['req']
+                requestName = self.dado['request']
             except:
                 print('Requisição fora do padrão e/ou Cliente se desconectou')
-                req = 'finish'
-                pass
+                requestName = 'finish'
 
 
-            if req == 'login':
-                dic_feedback = request.login_handle(**self.dado)
-                if dic_feedback['feedback'] == 0:
-                    if dic_feedback['senha'] == self.dado['senha']:
-                        # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
-                        dic_client = {}
-                        dic_client['client_address'] = self.client_address
-                        dic_client['client_id'] = dic_feedback['id_user']
-                        # Em seguida, dic_cliente é adicionado à lista de clientes
-                        self.__class__.lst_client.append(dic_client)
-                        print('Cliente se conectou! ', self.__class__.lst_client)
-                        self.__send__(dic_feedback)
-                    else:
-                        dic_feedback['feedback'] = 1
-                        dic_feedback['Erro'] = 'Senha incorreta'
-                        self.__send__(dic_feedback)
+            if requestName == 'login':
+                feedback = MyRequestHandler(self.dado)
+                if isinstance(feedback, DTP.InternalExceptions) is not True:
+                    # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
+                    dictClient = {'client_address': self.client_address, 'client_id': feedback.data.idd, 'client': self.request}
+                    # Em seguida, dic_cliente é adicionado à lista de clientes
+                    self.__class__.lst_client.append(dictClient)
+                    print('Client has just made a connection! ', self.__class__.lst_client)
+                    self.__send__(feedback)
                 else:
-                    self.__send__(dic_feedback)
+                    self.__send__(feedback)
 
-            elif req == 'carrega_contatos':
-                dic_feedback = request.carrega_contat_handle(**self.dado)
-                self.__send__(dic_feedback)
+            elif requestName == 'send_message':
+                feedback = MyRequestHandler(self.dado)
+                if isinstance(feedback, DTP.Request):
+                    id_dest = feedback.data.recipId
+                    client_dest = self.__class__.search_client(id_dest)
+                    if client_dest is not None:
+                        self.__sendTo__(client_dest, feedback)
 
-            elif req == 'carrega_conversa':
-                dic_feedback = request.carrega_conv_handle(**self.dado)
-                self.__send__(dic_feedback)
+                    self.__send__(feedback)
 
-            elif req == 'envio_msg':
-                dic_feedback = request.envio_msg_handle(**self.dado)
-                self.__send__(dic_feedback)
-                #ENVIAR PARA O DEST
-
-            elif req == 'finish':
+            elif requestName == 'finish':
                 self.finish()
 
-            elif req == 'insere_user':
-                dic_feedback = request.novo_user_handle(**self.dado)
-                self.__send__(dic_feedback)
+            else:
+                feedback = MyRequestHandler(self.dado)
+                self.__send__(feedback)
 
-            elif req == 'busca_contato':
-                dic_feedback = request.busca_contato_handle(**self.dado)
-                self.__send__(dic_feedback)
-
-            elif req == 'conexao':
-                self.__send__(self.dado)
-
-    def __send__(self, obj):
+    def __sendTo__(self, socketRequest, obj:DTP.DataTransfer):
         try:
+            obj = obj.toJson()
+            dado_str = json.dumps(obj)
+            dado_bytes = bytes(dado_str, "utf-8")
+            socketRequest.sendall(dado_bytes)
+        except Exception as Expt:
+            print(Expt)
+
+    def __send__(self, obj:DTP.DataTransfer):
+        try:
+            obj = obj.toJson()
             dado_str = json.dumps(obj)
             dado_bytes = bytes(dado_str, "utf-8")
             self.request.sendall(dado_bytes)
         except Exception as Expt:
             print(Expt)
-            pass
+
 
     def __receive__(self):
         try:
@@ -93,7 +87,6 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             return(dado_obj)
         except Exception as Expt:
             print(Expt)
-            pass
 
     def finish(self):
         self.__class__.finish_client(client_address = self.client_address)
@@ -102,6 +95,12 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     @classmethod
     def lst_clients(cls):
         return(cls.lst_client)
+
+    @classmethod
+    def search_client(cls, id_client):
+        for elem_client in cls.lst_client:
+            if elem_client['client_id'] == id_client:
+                return elem_client['client']
 
     @classmethod
     def finish_client(cls, **kwargs):
@@ -132,7 +131,8 @@ if __name__ == "__main__":
 
     try:
         server_thread.start()
-        print('<< Servidor ON! >>')
+        print('<< Server online >>')
     except KeyboardInterrupt:
+        print('<< Server offline >>')
         sys.exit(0)
 

@@ -111,8 +111,6 @@ class conexao_BD_prog:
         except Exception as Expt:
             self.__expt_msg__(Expt)
 
-
-
     def __strip_id__(self, idd, tipo = 'int'):
         idd = str(idd)
         idd = idd.strip(')').strip( '(' ).strip( "," )
@@ -125,15 +123,8 @@ class conexao_BD_prog:
         else:
             raise Exception('Argumento: ', tipo, ' não reconhecido, precisa ser "str" ou "int"')
 
-
-
-
-
     def finaliza_conexao(self):
         self.__disconect_BD__()
-   
-
-
 
     def __expt_msg__(self, Expt):
         print('Erro no BD')
@@ -142,27 +133,22 @@ class conexao_BD_prog:
         print(type(Expt))
         return(Expt)
 
-
     def __cria_BD__(self):
         # CRIANDO A TABELA mensagens:
-        sql = 'CREATE TABLE IF NOT EXISTS mensagens(id INTEGER PRIMARY KEY AUTOINCREMENT, id_dest INTEGER, id_remete INTEGER, data_hora datetime, conteudo TEXT, FOREIGN KEY(id_dest) REFERENCES usuarios(id), FOREIGN KEY(id_remete) REFERENCES usuarios(id))'
+        sql = 'CREATE TABLE IF NOT EXISTS mensagens(id INTEGER PRIMARY KEY AUTOINCREMENT, recipId INTEGER, id_remete INTEGER, dateTime datetime, content TEXT, FOREIGN KEY(recipId) REFERENCES usuarios(id), FOREIGN KEY(id_remete) REFERENCES usuarios(id))'
         self.__execute_commit__(sql)
 
         # CRIANDO A TABELA usuarios:
         sql = 'CREATE TABLE IF NOT EXISTS usuarios(id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(40) UNIQUE, senha VARCHAR(6))'
         self.__execute_commit__(sql)
 
-
-
-
 ####################################################################
 # MÉTODOS DE INSERÇÃO:
 
-
-
     def insere_user(self, **kwargs):
-        tupla = (kwargs.get('nome'), kwargs.get('senha'))
-        
+        print(kwargs)
+        tupla = (kwargs.get('userName'), kwargs.get('password'))
+
         sql = 'INSERT INTO usuarios (nome, senha) VALUES(?, ?)'
         feedback = self.__execute_commit__(sql, tupla)
         dic_feedback = {}
@@ -175,21 +161,15 @@ class conexao_BD_prog:
             dic_feedback['Erro'] = ''
             print('usuario salvo no banco de dados!')
         return(dic_feedback)
-        
-        
-        
-        
+
     def insere_msg(self, **kwargs):
-
-
-
-        data_hora = kwargs.get('data_hora')
-        conteudo = kwargs.get('conteudo')
-        id_dest = str(kwargs.get('id_dest'))
-        id_remete = str(kwargs.get('id_rem'))
+        data_hora = kwargs.get('dateTime')
+        conteudo = kwargs.get('content')
+        id_dest = str(kwargs.get('recipId'))
+        id_remete = str(kwargs.get('senderId'))
         tupla_sql = (conteudo, data_hora, id_dest, id_remete)
 
-        sql = 'INSERT INTO mensagens (conteudo, data_hora, id_dest, id_remete) VALUES(?, ?, ?, ?)'
+        sql = 'INSERT INTO mensagens (content, dateTime, recipId, id_remete) VALUES(?, ?, ?, ?)'
         self.__execute_commit__(sql, tupla_sql)
         
         # LEMBRAR QUE FEEDBACK PRECISA SER IMPlwMENTANDO PARA TRATAR ERROS
@@ -199,15 +179,8 @@ class conexao_BD_prog:
         return(feedback)
 
 
-
-
-
-
-
 #########################################################################
 # MÉTODOS DE COLETA: (FETCH)
-
-
 
     def fetch_usuario(self, nome):      
         sql = 'SELECT id, nome, senha FROM usuarios WHERE nome = "' + nome + '" ;'
@@ -220,14 +193,10 @@ class conexao_BD_prog:
             dic_return['id_user'] = tupl[0] 
             dic_return['nome_user'] = tupl[1]
             dic_return['senha'] = tupl[2]
-        
         else:
             dic_return['feedback'] = 1
-            
             dic_return['Erro'] = 'usuario nao encontrado'
-            
         return(dic_return)
-
 
     def fetchall_contatos_like(self, **kwargs):
         nome_like = kwargs.get('nome_like')
@@ -236,9 +205,7 @@ class conexao_BD_prog:
         #~ print(sql)
         lst_tupl = self.__execute_fetchall__(sql)
         #~ print(lst_tupl)
-        
-        
-        
+
         dic_return = {}
         lst_contat =[]
         if lst_tupl != []:
@@ -251,15 +218,12 @@ class conexao_BD_prog:
                 dic_elem['id_contato'] = tupl[0]
                 dic_elem['nome_contato'] = tupl[1]
                 lst_contat.append(dic_elem)
-                
             dic_return['lst_contatos'] = lst_contat
         else:
             dic_return['feedback'] = 1
             dic_return['Erro'] = 'usuario nao encontrado'
-            
         return(dic_return)
-        
-      
+
     def fetchall_contatos(self, id_user):
         id_user = self.__strip_id__(id_user, 'str')
         
@@ -275,10 +239,7 @@ class conexao_BD_prog:
         return(lst_dic)
         
 
-        
-
     def fetch_mensagens(self, id_user, id_contato):
-        
         id_user = self.__strip_id__(id_user, tipo = 'str')
         sql = 'SELECT nome FROM usuarios WHERE id = ' + id_user + ';'
         nome_user = self.__execute_fetchall__(sql)
@@ -288,40 +249,35 @@ class conexao_BD_prog:
         sql = 'SELECT nome FROM usuarios WHERE id = ' + id_contato + ';'
         nome_contato = self.__execute_fetchall__(sql)
         #~ print(nome_contato)
-        
-        
-        sql = 'SELECT data_hora, conteudo, id_dest, id_remete, nome FROM mensagens INNER JOIN usuarios ON (mensagens.id_dest = usuarios.id) WHERE ((id_remete = '+ id_user +' AND id_dest = '+id_contato+') OR (id_remete = '+id_contato+' AND id_dest = '+id_user+')) ORDER BY data_hora'
+
+        sql = 'SELECT dateTime, content, recipId, id_remete, nome FROM mensagens INNER JOIN usuarios ON (mensagens.recipId = usuarios.id) WHERE ((id_remete = '+ id_user +' AND recipId = '+id_contato+') OR (id_remete = '+id_contato+' AND recipId = '+id_user+')) ORDER BY dateTime'
         tupl_lst = self.__execute_fetchall__(sql)
         #~ print(tupl_lst)
        
         lst_dic = []
-        
         for elem_tupl in tupl_lst:
-
             if  id_user == str(elem_tupl[3]):
                 dic_mensg = {}
                 dic_mensg['id_user'] = id_user
-                dic_mensg['data_hora'] = elem_tupl[0]
-                dic_mensg['conteudo'] = elem_tupl[1]
-                dic_mensg['id_dest'] = elem_tupl[2]
-                #dic_mensg['id_rem'] = elem_tupl[3]
-                dic_mensg['dest'] = nome_contato[0] #NOME DO DESTINATÁRIO
-                dic_mensg['remet'] = nome_user[0]
-                dic_mensg['id_rem'] = id_user
+                dic_mensg['dateTime'] = elem_tupl[0]
+                dic_mensg['content'] = elem_tupl[1]
+                dic_mensg['recipId'] = elem_tupl[2]
+                #dic_mensg['senderId'] = elem_tupl[3]
+                dic_mensg['recipName'] = nome_contato[0][0] #NOME DO DESTINATÁRIO
+                dic_mensg['senderName'] = nome_user[0][0]
+                dic_mensg['senderId'] = id_user
                 lst_dic.append(dic_mensg)
-            
             if id_user == str(elem_tupl[2]):
                 dic_mensg = {}
                 dic_mensg['id_user'] = id_user
-                dic_mensg['data_hora'] = elem_tupl[0]
-                dic_mensg['conteudo'] = elem_tupl[1]
-                dic_mensg['id_dest'] = elem_tupl[2]
-                #dic_mensg['id_rem'] = elem_tupl[3]
-                dic_mensg['dest'] = nome_user[0] #NOME DO DESTINATÁRIO
-                dic_mensg['remet'] = nome_contato[0]
-                dic_mensg['id_rem'] = id_contato
+                dic_mensg['dateTime'] = elem_tupl[0]
+                dic_mensg['content'] = elem_tupl[1]
+                dic_mensg['recipId'] = elem_tupl[2]
+                #dic_mensg['senderId'] = elem_tupl[3]
+                dic_mensg['recipName'] = nome_user[0][0] #NOME DO DESTINATÁRIO
+                dic_mensg['senderName'] = nome_contato[0][0]
+                dic_mensg['senderId'] = id_contato
                 lst_dic.append(dic_mensg)
-                
         return(lst_dic)
 
 

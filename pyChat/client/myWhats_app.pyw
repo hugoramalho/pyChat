@@ -5,13 +5,17 @@
 #
 #  Ramalho <Ramalho@DESKTOP-MEI8G7T>
 #
-from pacotes_app.login_frame import *
-from pacotes_app.novo_user_frame import *
-from pacotes_app.novo_user_frame import *
-from pacotes_app.chat_frame import *
-from pacotes_app.classes_mywhats import *
-from cliente_tcp.cliente_tcp import *
-from tkinter import Tk
+from tkinter import *
+from tkinter import messagebox
+
+from pyChat.client.pacotes_app import Models
+from pyChat.client.pacotes_app.chatActivity import *
+from pyChat.client.pacotes_app.loginActivity import *
+from pyChat.client.pacotes_app.newUserActivity import *
+from pyChat.client.cliente_tcp.cliente_tcp import *
+#from pacotes_app import Models
+
+
 
 
 __author__ = "Ramalho, Hugo"
@@ -27,13 +31,20 @@ __status__ = "Testing"
 class sessao(Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.con = cliente_tcp()
+
+        self.con = cliente_tcp(self)
+        self.conecta()
         self.title("myWhatsApp")
         self.resizable(0, 0)
 
-        self.nome_user = ''
-        self.id_user = ''
 
+        self.userAct = Models.user()
+        self.userId = self.userAct.idd
+        self.userName = self.userAct.userName
+        self.userEmail = self.userAct.userEmail
+
+
+        self.frames = {}
         # ~ self.title_font = Tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
 
         self.show_frame("login_frame")
@@ -46,15 +57,38 @@ class sessao(Tk):
             frame = login_frame(self, self)
             frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
             frame.tkraise()
+            self.frames['login_frame']= frame
+            
         elif page_name == 'novo_user_frame':
             frame = novo_user_frame(self, self)
             frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
+            self.frames['novo_user_frame']= frame
             frame.tkraise()
+            
         elif page_name == 'chat_frame':
-
             frame = chat_frame(self, self)
             frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
+            self.frames['chat_frame']= frame
             frame.tkraise()
+
+    def raiseFrame(self, page_name):
+        if page_name == 'sobre_frame':
+            frame = sobre_frame_ui()
+            #frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
+            self.frames['sobre_frame']= frame
+            #frame.tkraise()
+
+        elif page_name == 'ajuda_frame':
+            frame = ajuda_frame_ui()
+            # frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
+            self.frames['ajuda_frame'] = frame
+            frame.tkraise()
+
+        elif page_name == 'addFriend_frame':
+            frame = addFrame_ui(self)
+            # frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
+            self.frames['addFriend_frame'] = frame
+            # frame.tkraise()
 
     def destroi_frames_filhos(self):
         if self.winfo_children() != []:
@@ -66,47 +100,107 @@ class sessao(Tk):
         else:
             return None
 
-    def login(self, **kwargs):
-        dic_login = {}
-        dic_login['req'] = 'login'
-        dic_login['nome'] = kwargs.get('usuario')
-        dic_login['senha'] = kwargs.get('senha')
+    def conecta(self):
+        try:
+            self.con.conecta()
+        except Exception as Expt:
+            return Expt
+
+
+    def handle(self, data):
+        print('Client handler. . .')
+        request = json.loads(data.decode())
+        print(request)
+
+        requestName = request['request']
+
+        if requestName == 'login':
+            if request['exception'] == 0:
+                self.userAct = self.userAct.fromJson(request['data'])
+                self.frames['login_frame'].login(request)
+            else:
+                messagebox.showwarning('Erro', request['errorName'])
+
+        elif requestName == 'retrieve_friends':
+            if request['exception'] == 0:
+                lstFriendsUser = Models.LstUsers().fromJson(request['data'])
+                self.frames['chat_frame'].setContatos(lstFriendsUser)
+            else:
+                messagebox.showwarning('Erro', request['errorName'])
+            
+        elif requestName == 'send_message':
+            if request['exception'] == 0:
+                message = Models.Message().fromJson(request['data'])
+                print(message)
+                print(self.userAct.idd == message.senderId)
+                self.frames['chat_frame'].append_msg(message)
+            else:
+                messagebox.showwarning('Erro', request['errorName'])
+
+        elif requestName == 'retrieve_chat':
+            if request['exception'] == 0:
+                lstMessages = Models.LstMessages().fromJson(request['data'])
+                self.frames['chat_frame'].carrega_msg(lstMessages)
+            else:
+                messagebox.showwarning('Erro', request['errorName'])
+
+        elif requestName == 'namesLike':
+            if request['exception'] == 0:
+                lstUsers = Models.LstUsers().fromJson(request['data'])
+                self.frames['chat_frame'].fill_search_contacts_like(lstUsers)
+            else:
+                messagebox.showwarning('Erro', request['errorName'])
+
+        elif requestName == 'new_user':
+            if request['exception'] == 0:
+                user = Models.user().fromJson(request['data'])
+                self.frames['novo_user_frame'].new_user_ok(user)
+            else:
+                messagebox.showwarning('Erro', request['errorName'])
+
+        elif requestName == 'addFriend':
+            if request['exception'] == 0:
+                friend = Models.user().fromJson(request['data'])
+                if friend.idd == self.userAct.idd:
+                    pass
+                else:
+                    self.frames['chat_frame'].addFriendList(friend)
+            else:
+                messagebox.showwarning('Erro', request['errorName'])
+
+
+    def login(self, login:Models.Login):
+        dictRequest=login.toJson()
+        dictRequest['request'] = 'login'
+        self.con.envia_req(dictRequest)
+
+
+    def new_user(self, user:Models.user):
+        dictRequest = user.toJson()
+        dictRequest['request'] = 'new_user'
+        self.con.envia_req(dictRequest)
+
+
+    def retrieve_chat(self, userFriend:Models.user):
+        friendId = userFriend.idd
+        userId = self.userAct.idd
+
+        dictRequest = {'request': 'retrieve_chat', 'userId': userId, 'friendId': friendId}
+        # Envia a requisição:
+        self.con.envia_req(dictRequest)
+
+
+    def retrieve_friends(self):
+        dictRequest = self.userAct.toJson()
+        dictRequest['request'] = 'retrieve_friends'
         # Envia e recebe feedback do servidor:
-        dic_feedback = self.con.envia_req(dic_login)
-        return (dic_feedback)
+        self.con.envia_req(dictRequest)
 
-    def novo_user(self, **kwargs):
-        dic_user = {}
-        dic_user['req'] = 'insere_user'
-        dic_user['nome'] = kwargs.get('usuario')
-        dic_user['senha'] = kwargs.get('senha')
+    def send_message(self, message:Models.Message):
+        dictRequest = message.toJson()
+        dictRequest['request']= 'send_message'
         # Envia e recebe feedback do servidor:
-        dic_feedback = self.con.envia_req(dic_user)
-        return (dic_feedback)
-
-    def carrega_conversa(self, **kwargs):
-        id_contato = kwargs.get('id_contato')
-        id_user = kwargs.get('id_user')
-
-        dic_com = {}
-        dic_com['req'] = 'carrega_conversa'
-        dic_com['id_contato'] = id_contato
-        dic_com['id_user'] = id_user
-
-        # Envia e recebe feedback do servidor:
-        dic_com = self.con.envia_req(dic_com)
-
-        lst_conv = dic_com['lst_conv']
-        return (lst_conv)
-
-    def carrega_contatos(self):
-        dic_contatos = {}
-        dic_contatos['req'] = 'carrega_contatos'
-        dic_contatos['id_user'] = self.id_user
-        # Envia e recebe feedback do servidor:
-        dic_contatos = self.con.envia_req(dic_contatos)
-        dic_contatos['lst_contatos'] = lst_contatos(**dic_contatos)
-        return (dic_contatos)
+        self.con.envia_req(dictRequest)
 
     def envia_msg(self, **dic_conv):
         dic_conv['req'] = 'envio_msg'
@@ -114,18 +208,14 @@ class sessao(Tk):
         feedback = self.con.envia_req(dic_conv)
         return (feedback)
 
-    def busca_contato(self, nome_like):
-        dic_req = {}
-        dic_req['req'] = 'busca_contato'
-        dic_req['nome_like'] = nome_like
-        # Envia e recebe feedback do servidor:
-        dic_req = self.con.envia_req(dic_req)
+    def searchNamesLike(self, namesLike):
+        dic_req = {'request': 'namesLike', 'namesLike': namesLike, 'user': self.userAct.toJson()}
+        self.con.envia_req(dic_req)
 
-        # ~ print(dic_req)
-        if (dic_req['feedback'] == 0):
-            return (dic_req)
-        else:
-            return ([])
+    def addFriend(self, friendEmail:str):
+        dictRequest = {'friendEmail': friendEmail, 'user': self.userAct.toJson(), 'request': 'addFriend'}
+        self.con.envia_req(dictRequest)
+
 
 
 class myWhats_app:
@@ -134,17 +224,11 @@ class myWhats_app:
         Unidade funcional do programa encapsulada numa classe.
     """
     def __init__(self):
-
         self.sessao_atv = sessao()
         self.sessao_atv.mainloop()
 
-
-
 def main():
-
-    
     app = myWhats_app()
-    
 
 if __name__ == '__main__':
     import sys
