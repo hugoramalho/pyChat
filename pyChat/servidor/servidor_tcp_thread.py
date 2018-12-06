@@ -49,11 +49,18 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                     client_dest = self.__class__.search_client(id_dest)
                     if client_dest is not None:
                         self.__sendTo__(client_dest, feedback)
-
                     self.__send__(feedback)
 
             elif requestName == 'finish':
                 self.finish()
+
+            elif requestName == 'addFriend':
+                feedback = MyRequestHandler(self.dado)
+                idFriend = feedback.data.idd
+                client_dest = self.__class__.search_client(idFriend)
+                if client_dest is not None:
+                    self.__sendTo__(client_dest, feedback)
+                self.__send__(feedback)
 
             else:
                 feedback = MyRequestHandler(self.dado)

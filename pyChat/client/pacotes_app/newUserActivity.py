@@ -51,7 +51,6 @@ class novo_user_frame(novo_user_ui):
             self.entrMail.limpa_entr()
             self.messagebox_info('Cadastro', 'Usuário cadastrado com sucesso!\nNome: '+user.userName+'\nEmail: '+user.userEmail)
 
-
     def __comando_B2__(self):
         self.grid_forget()
         self.sessao_atv.show_frame('login_frame')

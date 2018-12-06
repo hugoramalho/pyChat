@@ -163,7 +163,7 @@ class sessao(Tk):
             if request['exception'] == 0:
                 friend = Models.user().fromJson(request['data'])
                 if friend.idd == self.userAct.idd:
-                    pass
+                    self.frames['chat_frame'].addFriendList(friend)
                 else:
                     self.frames['addFriend_frame'].addFriendOk(friend)
                     self.frames['chat_frame'].addFriendList(friend)
