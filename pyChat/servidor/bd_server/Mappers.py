@@ -4,7 +4,7 @@ from . import Models
 
 class DataMapper(sqliteServer.sqliteConn):
     def __init__(self):
-        super().__init__("bd_server\DB2_app.db")
+        super().__init__()
 
     def createTables(self):
         sql = 'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, userEmail VARCHAR(40) UNIQUE, userName VARCHAR(50), password VARCHAR(6))'

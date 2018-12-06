@@ -29,7 +29,6 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 print('Requisição fora do padrão e/ou Cliente se desconectou')
                 requestName = 'finish'
 
-
             if requestName == 'login':
                 feedback = MyRequestHandler(self.dado)
                 if isinstance(feedback, DTP.InternalExceptions) is not True:
