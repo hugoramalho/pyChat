@@ -14,6 +14,7 @@ __all__ = ['sub_CBox', 'sub_Menu', 'wd_Entry', 'sub_Text', 'sub_Treeview', 'logi
 class login_ui(Frame):
     def __init__(self, framePai, **kwargs):
         super().__init__(framePai)
+        self.grid(sticky=E+W)
 
 
         #Subtítulos do programa:

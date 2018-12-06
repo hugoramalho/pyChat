@@ -10,6 +10,7 @@ class addFrame_ui(Frames.AddFriendFrame):
         self.controller = controller
 
         self.add_button.config(command= lambda: self.addFriend())
+        self.add_button.bind('<KeyRelease-Return>', lambda event: self.addFriend())
 
         self.friendEmail =''
 

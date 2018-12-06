@@ -19,7 +19,7 @@ from pyChat.client.Models import Models
 
 
 __author__ = "Ramalho, Hugo"
-__copyright__ = "Copyright 2007, Trabalho de Redes -  myWhats_app.py"
+__copyright__ = "Copyright 2017, Trabalho de Redes -  myWhats_app.py"
 __credits__ = ["Instituto Federal do Espirito Santo, Campus SERRA", "Professor Gilmar Vassoler"]
 __license__ = "GPL"
 __version__ = "0.9"
@@ -79,7 +79,8 @@ class sessao:
         try:
             self.con.conecta()
         except Exception as Expt:
-            return Expt
+            print('chegou aqui')
+            self.reportException(Expt)
 
     def sendRequest(self, request:dict):
         self.con.envia_req(request)

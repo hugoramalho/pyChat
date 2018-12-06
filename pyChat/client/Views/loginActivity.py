@@ -9,8 +9,9 @@ class login_frame(login_ui):
         super().__init__(frame_pai)
         
         self.controller = controller
+
         
-        self.tit1.config(text = "Bem Vindo ao myWhatsApp!")
+        self.tit1.config(text = "Bem Vindo ao pyChat!")
         #~ self.tit2.config(text = "Entre com seu login ou crie um usuário...")
 
         #Abaixo é definido o título da entrada 1

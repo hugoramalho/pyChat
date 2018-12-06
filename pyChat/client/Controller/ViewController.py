@@ -13,11 +13,14 @@ class MainViewController(Tk):
         self.session = session
         self.activityFrames = {}
 
+    @property
+    def currentUser(self):
+        return self.session.currentUser
 
     def loginActivity(self):
         self.destroyChildrenFrames()
         frame = loginActivity.login_frame(self, self)
-        frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
+        frame.grid(row=0, column=0, sticky="nsew", ipadx=15, padx=25, pady=25)
         frame.tkraise()
         self.activityFrames['login_frame'] = frame
 

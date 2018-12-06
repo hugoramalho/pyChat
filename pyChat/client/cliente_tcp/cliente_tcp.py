@@ -16,30 +16,13 @@ class cliente_tcp:
         self.client_t = client2.ClientProtocol(controller)
         
 
-    def conecta(self):
-        if self.con_status == False:
-            dic_feedback = {'feedback': 0,'Erro': '', 'Aviso': '', 'Exception': None}
-            try:
-                self.tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.tcp.connect(self.dest)
-                self.con_status = True
-                dic_feedback['feedback'] = 0
-                return(dic_feedback)
-            except Exception as Expt:
-                print(Expt)
-                print(type(Expt))
-                dic_feedback['feedback'] = 1
-                dic_feedback['Erro'] = 'falha na conexão'
-                dic_feedback['Exception'] = Expt
-                print(dic_feedback)
-                return(dic_feedback)
-                
+
     def conecta(self):
         try:
             self.client_t.connect()
         except Exception as Expt:
-
-            return Expt
+            print('mais aqui')
+            raise Expt
 
 
     def desconecta(self):

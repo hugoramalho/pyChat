@@ -51,7 +51,10 @@ class ClientHandler:
                 self.session.reportException(Exception('Requisiçao não recuperada!'))
 
 
-    def exceptionHandler(self) -> Exception or None:
+    def exceptionHandler(self, Expt = None) -> Exception or None:
+        if Expt is not None and isinstance(Expt, Exception):
+            self.session.reportException(Expt)
+
         if self.request['exception'] != 0:
             return Exception(self.request['errorName'])
         else:
