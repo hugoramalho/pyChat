@@ -1,4 +1,5 @@
-from . import Models, Mappers, DTP
+from pyChat.servidor.bd_server.Models import Models
+from pyChat.servidor.bd_server.Services import Mappers, DTP
 
 
 def MyRequestHandler(dictRequest: dict):

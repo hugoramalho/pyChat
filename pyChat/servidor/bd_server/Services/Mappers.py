@@ -1,8 +1,8 @@
-from . import sqliteServer
-from .DTP import *
-from . import Models
+from pyChat.servidor.bd_server.Models import Models
+from pyChat.servidor.bd_server import SqliteServer
 
-class DataMapper(sqliteServer.sqliteConn):
+
+class DataMapper(SqliteServer.sqliteConn):
     def __init__(self):
         super().__init__()
 

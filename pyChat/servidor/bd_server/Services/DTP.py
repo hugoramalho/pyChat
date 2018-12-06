@@ -1,6 +1,6 @@
 """DATA TRANSFER PROTOCOLS"""
 
-from . import Models
+from pyChat.servidor.bd_server.Models import Models
 
 class InternalExceptions:
     def __init__(self, requestName, exception: Exception):

@@ -1,7 +1,7 @@
 import sqlite3
 
 class sqliteConn:
-    def __init__(self, nameDb: str = "bd_server\BD_prog.db") -> object:
+    def __init__(self, nameDb: str = "bd_server\sqliteServer\BD_prog.db") -> object:
         """
 
         :rtype: object
@@ -20,7 +20,7 @@ class sqliteConn:
     def __conect_BD__(self):
         try:
             if (self.con_status == False):
-                self.conn = sqlite3.connect("bd_server\BD_prog.db")
+                self.conn = sqlite3.connect("bd_server\sqliteServer\BD_prog.db")
                 self.con_status = True
                 self.conn.commit()
                 self.cursor = self.conn.cursor()
