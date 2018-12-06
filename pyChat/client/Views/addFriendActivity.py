@@ -3,6 +3,7 @@ from tkinter import messagebox
 from pyChat.client.Views.UIElements import Frames
 from pyChat.client.Models import Models
 
+
 class addFrame_ui(Frames.AddFriendFrame):
     def __init__(self, controller):
         super().__init__()
@@ -15,7 +16,7 @@ class addFrame_ui(Frames.AddFriendFrame):
     def addFriend(self):
         self.friendEmail = self.entr_email.get()
         if self.friendEmail != '':
-            self.controller.addFriend(self.friendEmail)
+            self.controller.requestAddFriend(self.friendEmail)
         else:
             pass
 

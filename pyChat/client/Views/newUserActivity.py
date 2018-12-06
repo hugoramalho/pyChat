@@ -3,10 +3,10 @@ from pyChat.client.Views.UIElements.Frames import novo_user_ui
 
 
 class novo_user_frame(novo_user_ui):
-    def __init__(self, frame_pai, sessao_atv):
+    def __init__(self, frame_pai, controller):
         super().__init__(frame_pai)
 
-        self.sessao_atv = sessao_atv
+        self.controller = controller
 
         self.tit1.config(text="Criando novo usuário")
         # ~ self.tit2.config(text = "Entre com seu login ou crie um usuário...")
@@ -42,9 +42,9 @@ class novo_user_frame(novo_user_ui):
             self.entr2.limpa_entr()
             self.entr3.limpa_entr()
         else:
-            self.sessao_atv.new_user(user)
+            self.controller.requestNewUser(user)
 
-    def new_user_ok(self, user: Models.user):
+    def newUserOK(self, user: Models.user):
             self.entr1.limpa_entr()
             self.entr2.limpa_entr()
             self.entr3.limpa_entr()
@@ -53,4 +53,4 @@ class novo_user_frame(novo_user_ui):
 
     def __comando_B2__(self):
         self.grid_forget()
-        self.sessao_atv.show_frame('login_frame')
+        self.controller.loginActivity()

@@ -393,10 +393,10 @@ class c_janelaPrincipal:
         ####################################################################################################################
         #------------------------------------------------------------------------------------------------------------------#
         
-        # Bloco (3) Declarando sub-frames da janela-pai:
-        '''A janela-pai está dividida em três sub-frames, lateral esquerdo, central, lateral direito, e um sub-frame de rodapé.
-                Na presente classe, cada um dos três sub-frames não admite sub-divisões, sendo containeres.
-                Sendo assim, adimitindo o maior grau de divisão de frames na classe, a janela-pai terá a seguinte divisão:
+        # Bloco (3) Declarando sub-activityFrames da janela-pai:
+        '''A janela-pai está dividida em três sub-activityFrames, lateral esquerdo, central, lateral direito, e um sub-frame de rodapé.
+                Na presente classe, cada um dos três sub-activityFrames não admite sub-divisões, sendo containeres.
+                Sendo assim, adimitindo o maior grau de divisão de activityFrames na classe, a janela-pai terá a seguinte divisão:
                 
                 ______________________________janela-pai______________________________
                 |(subFrameLateralEsquerdo)|(subFrameCentral)|(subFrameLateralDireito)|

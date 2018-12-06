@@ -4,11 +4,11 @@ from pyChat.client.Views.UIElements.Frames import login_ui, ajuda_frame_ui
 
 class login_frame(login_ui):
     
-    def __init__(self, frame_pai, sessao_atv):
+    def __init__(self, frame_pai, controller):
         
         super().__init__(frame_pai)
         
-        self.sessao_atv = sessao_atv
+        self.controller = controller
         
         self.tit1.config(text = "Bem Vindo ao myWhatsApp!")
         #~ self.tit2.config(text = "Entre com seu login ou crie um usuário...")
@@ -32,22 +32,15 @@ class login_frame(login_ui):
         #~ self.grid(sticky = W+E)
 
 
-    def login(self, dic_login):
-        # A tela de login é desfeita:
-        self.grid_forget()
-        # E a sessão abre a tela de chat:
-        self.sessao_atv.show_frame('chat_frame')
-
     def __comando_B1__(self):
         login = Models.Login()
         login.userEmail = self.entr1.retorna_entr()
         login.password = self.entr2.retorna_entr()
-        self.sessao_atv.login(login)
+        self.controller.requestLogin(login)
 
     def __comando_B2__(self):
         self.grid_forget()
-        self.sessao_atv.show_frame('novo_user_frame')
+        self.controller.newUserActivity()
 
     def __comando_B3__(self):
-        # def __raise_ajuda__(self, top_frame):
-        ajuda = ajuda_frame_ui()
+        self.controller.helpActivity()

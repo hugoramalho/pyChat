@@ -1,5 +1,7 @@
+from tkinter import *
+from tkinter import ttk
 
-class ajuda_frame_ui(Toplevel):
+class helpActivity(Toplevel):
     def __init__(self):
         super().__init__()
         self.titulo = Label(self, text = 'Ajuda')

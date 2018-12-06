@@ -4,12 +4,13 @@ from pyChat.client.Models import Models
 from pyChat.client.Views.UIElements.Frames import chat_frame_ui
 
 
+
 class chat_frame(chat_frame_ui):
-    def __init__(self, frame_pai, sessao_atv):
+    def __init__(self, frame_pai, controller):
         super().__init__(frame_pai)
 
-        self.sessao_atv = sessao_atv
-        self.sessao_atv.retrieve_friends()
+        self.controller = controller
+        self.controller.requestRetrieveFriends()
 
         # LEMBRAR DE CRIAR METODOS QUE CARREGAMOS OS CONTATOS!
         self.currentChat = Models.LstMessages
@@ -19,7 +20,7 @@ class chat_frame(chat_frame_ui):
         self.userFriendsList = Models.LstUsers()
 
 
-        self.config_opcoes1(command=lambda: self.sessao_atv.show_frame('login_frame'))
+        self.config_opcoes1(command=lambda: self.controller.loginActivity())
         self.config_ajuda1(command=lambda: self.__raise_ajuda__())
         self.config_ajuda2(command=lambda: self.__raise_sobre__())
         self.botao_envia.config(command=lambda: self.__envia_msg__())
@@ -30,7 +31,7 @@ class chat_frame(chat_frame_ui):
         self.entr_contatos.bind('<KeyRelease>', lambda event: self.__search_contacts__())
 
     def __add_contato__(self):
-        self.sessao_atv.raiseFrame('addFriend_frame')
+        self.controller.addFriendActivity()
 
     def setContatos(self, lstUser: Models.LstUsers):
         print(lstUser)
@@ -42,10 +43,10 @@ class chat_frame(chat_frame_ui):
         self.contatos_treeview.insert_lst_treeView(self.userFriendsList.toTreeview())
 
     def __raise_ajuda__(self):
-        self.sessao_atv.raiseFrame('ajuda_frame')
+        self.controller.helpActivity()
 
     def __raise_sobre__(self):
-        self.sessao_atv.raiseFrame('sobre_frame')
+        self.controller.aboutActivity()
 
     def carrega_msg(self, lstMessage: Models.LstMessages):
         self.lst_conversa_atv = lstMessage
@@ -53,9 +54,7 @@ class chat_frame(chat_frame_ui):
         self.conversa_treeview.insert_lst_treeView(self.lst_conversa_atv.toTreeview())
 
     def addFriendList(self, friend: Models.user):
-        self.sessao_atv.retrieve_friends()
-
-
+        self.controller.requestRetrieveFriends()
 
     def __carrega_contato__(self):
         # Caso haja seleção de contato na lista, a id do contato selecionado é capturada:
@@ -70,8 +69,7 @@ class chat_frame(chat_frame_ui):
         self.entr_msg.limpa_entr()
 
         # A lista de conversas daquele contato é carregada:
-        self.sessao_atv.retrieve_chat(self.currentContactChat)
-
+        self.controller.requestRetrieveChat(self.currentContactChat)
 
     def fill_search_contacts_like(self, lstUsersLike: Models.LstUsers):
         if (lstUsersLike != []):
@@ -84,36 +82,28 @@ class chat_frame(chat_frame_ui):
             self.contatos_treeview.clear_treeView()
             self.contatos_treeview.insert_kwargs_treeView(**dic_treev)
 
-
     def __search_contacts__(self):
         nameLike = self.entr_contatos.retorna_entr()
-        self.sessao_atv.searchNamesLike(nameLike)
-
+        self.controller.requestNamesLike(nameLike)
 
     def __envia_msg__(self):
         content = self.entr_msg.retorna_entr()
         if content != '':
             message = self.__msg__
             self.entr_msg.limpa_entr()
-            self.sessao_atv.send_message(message)
+            self.controller.requestSendMessage(message)
             self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
-
 
     def append_msg(self, message: Models.Message):
-        if message.recipId == self.sessao_atv.userAct.idd:
-            print(' caiu aqui eja')
-            self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
-        else:
-            pass
-
+        self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
 
     @property
     def __msg__(self):
         present = datetime.now()
         message = Models.Message()
         message.dateTime = present
-        message.sessionUserId = self.sessao_atv.userAct.idd
-        message.senderUser = self.sessao_atv.userAct
+        message.sessionUserId = self.controller.session.currentUser.idd
+        message.senderUser = self.controller.session.currentUser
         message.recipUser = self.currentContactChat
         message.content = self.entr_msg.retorna_entr()
         return message
