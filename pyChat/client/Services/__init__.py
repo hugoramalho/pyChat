@@ -8,13 +8,13 @@ class ClientHandler:
     def __init__(self, session):
         self.session = session
 
+        self.request = None
 
     def handle(self, data):
         self.request = json.loads(data.decode())
 
-        catch = self.exceptionHandler()
-        if isinstance(catch, Exception):
-            self.session.reportException(catch)
+        if self.request['exception'] == 1:
+            self.exceptionHandler(Exception(self.request['errorName']))
 
         else:
             requestName = self.request['request']
@@ -51,11 +51,5 @@ class ClientHandler:
                 self.session.reportException(Exception('Requisiçao não recuperada!'))
 
 
-    def exceptionHandler(self, Expt = None) -> Exception or None:
-        if Expt is not None and isinstance(Expt, Exception):
-            self.session.reportException(Expt)
-
-        if self.request['exception'] != 0:
-            return Exception(self.request['errorName'])
-        else:
-            return None
+    def exceptionHandler(self, Expt = Exception) -> Exception or None:
+        self.session.reportException(Expt)

@@ -32,7 +32,6 @@ class sessao:
     def __init__(self):
         self.clientHandler = Services.ClientHandler(self)
         self.con = cliente_tcp(self.clientHandler)
-        self.conecta()
 
         self.currentUser = Models.user()
 
@@ -77,13 +76,12 @@ class sessao:
 
     def conecta(self):
         try:
-            self.con.conecta()
+            self.con.connect()
         except Exception as Expt:
-            print('chegou aqui')
             self.reportException(Expt)
 
     def sendRequest(self, request:dict):
-        self.con.envia_req(request)
+        self.con.sendRequest(request)
 
 
 

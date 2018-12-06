@@ -9,78 +9,32 @@ class cliente_tcp:
         self.host = kwargs.get('host', '127.0.0.1')     # Endereco IP do Servidor
         self.port = kwargs.get('port', 3333)           # Porta que o Servidor está
         self.dest = (self.host, self.port)
-        self.con_status = False
-
         self.controller = controller
-        
-        self.client_t = client2.ClientProtocol(controller)
-        
+        self.assincClient = client2.ClientProtocol(self.controller)
 
 
-    def conecta(self):
+    def connect(self):
         try:
-            self.client_t.connect()
+            self.assincClient = client2.ClientProtocol(self.controller)
+            self.assincClient.connect()
         except Exception as Expt:
-            print('mais aqui')
-            raise Expt
+            self.controller.exceptionHandler(Expt)
+
+    def disconnect(self):
+        self.assincClient.disconnect()
 
 
-    def desconecta(self):
-        if self.con_status == True:
-            dic_feedback = {'feedback': 0,'Erro': '', 'Aviso': '', 'Exception': None}
-            try:
-                self.tcp.close()
-                self.con_status = False
-                dic_feedback['feedback'] = 0
-                return(dic_feedback)
-                
-            except Exception as Expt:
-                #LEMBRAR DE TRATAR ERROS
-                print(Expt)
-                print(type(Expt))
-                dic_feedback['feedback'] = 1
-                dic_feedback['Erro'] = 'Falha na desconexão'
-                dic_feedback['Exception'] = Expt
-                return(dic_feedback)
 
-
-    def recebe(self):
-        #CASO NAO HAVA CONEXÃO, OU A CONEXÃO NÃO TENHA SIDO ESTABELECIDA:
-        dic_feedback = {'feedback': 0,'Erro': '', 'Aviso': '', 'Exception': None}
-        if self.con_status == False:
-            self.conecta()
-        #ABAIXO UM JEITO ALTERNATIVO DE FAZER A CONVERSÃO:
-        #PRECISO VER QUAL É O CORRETO (TO-DO)
-        #data = str(self.tcp.recv(4096), "utf-8")
+    def sendRequest(self, obj):
         try:
-            dado = self.tcp.recv(11264).decode('utf-8')
-            #~ print('Dado recebido do serv: ', dado)
+            if self.assincClient.connStatus is False:
+                self.connect()
+                if self.assincClient.connStatus is True:
+                    print('AQUI YU')
+                    print(obj)
+                    data = json.dumps(obj)
+                    data.encode()
+                #   self.assincClient.send_message(data)
+                    self.assincClient.transport.write(data.encode('utf-8'))
         except Exception as Expt:
-            print(Expt, type(Expt))
-            dic_feedback['feedback'] = -1
-            dic_feedback['Erro'] = 'Erro ao receber dado'
-            dic_feedback['Exception'] = Expt
-            return(dic_feedback)
-        
-        try:
-            obj = json.loads(dado)
-            print(obj)
-            return(obj)
-        except Exception as Expt:
-            print(Expt, type(Expt))
-            dic_feedback['feedback'] = -1
-            dic_feedback['Erro'] = 'Erro ao codificar o dado'
-            dic_feedback['Exception'] = Expt
-            return(dic_feedback)
-
-
-    def envia_req(self, obj):
-        try:
-            print('Enviando req: ', obj)
-            data = json.dumps(obj)
-            data.encode()
-            #self.client_t.send_message(data)
-            self.client_t.transport.write(data.encode('utf-8'))
-        except Exception as Expt:
-            return Expt
-
+            self.controller.exceptionHandler(Expt)
