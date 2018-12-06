@@ -1,2 +1,0 @@
-O módulo cliente_tcp_thread foi uma tentativa de implementar uma classe cliente que estaria sempre "Ouvindo" o servidor.
-Não tive tempo de pesquisar muito sobre isso. Ignore-a.
