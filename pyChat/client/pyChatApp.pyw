@@ -8,7 +8,7 @@
 from tkinter import *
 from tkinter import messagebox
 
-from pyChat.client.cliente_tcp.cliente_tcp import *
+from pyChat.client.cliente_tcp.ClientTCP import *
 from pyChat.client import Services
 from pyChat.client.Controller import ViewController
 from pyChat.client.Models import Models

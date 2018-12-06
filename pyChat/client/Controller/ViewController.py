@@ -74,19 +74,15 @@ class MainViewController(Tk):
     def addFriend(self, friend:Models.user):
         self.activityFrames['chat_frame'].addFriendList(friend)
 
-
-
     def requestLogin(self, login: Models.Login):
         dictRequest=login.toJson()
         dictRequest['request'] = 'login'
         self.session.sendRequest(dictRequest)
 
-
     def requestNewUser(self, user: Models.user):
         dictRequest = user.toJson()
         dictRequest['request'] = 'new_user'
         self.session.sendRequest(dictRequest)
-
 
     def requestRetrieveChat(self, userFriend: Models.user):
         friendId = userFriend.idd
@@ -94,7 +90,6 @@ class MainViewController(Tk):
         dictRequest = {'request': 'retrieve_chat', 'userId': userId, 'friendId': friendId}
         # Envia a requisição:
         self.session.sendRequest(dictRequest)
-
 
     def requestRetrieveFriends(self):
         dictRequest = self.session.currentUser.toJson()
@@ -107,7 +102,6 @@ class MainViewController(Tk):
         dictRequest['request']= 'send_message'
         # Envia e recebe feedback do servidor:
         self.session.sendRequest(dictRequest)
-
 
     def requestNamesLike(self, namesLike):
         dic_req = {'request': 'namesLike', 'namesLike': namesLike, 'user': self.session.currentUser.toJson()}

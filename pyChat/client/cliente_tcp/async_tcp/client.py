@@ -1,5 +1,4 @@
 import asyncio
-import json
 import threading
 from functools import partial
 import logging
@@ -24,8 +23,12 @@ class ClientProtocol(asyncio.Protocol):
             loop.set_debug(True)
             coro = loop.create_connection(lambda: self, '127.0.0.1', 3333)
             _, proto = loop.run_until_complete(coro)
-        except:
+        except RuntimeError:
             pass
+        except OSError as Expt:
+            self.handler.exceptionHandler(Expt)
+
+
 
     def _run(self, loop):
         asyncio.set_event_loop(loop)
