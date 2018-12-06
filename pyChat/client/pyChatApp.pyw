@@ -31,12 +31,12 @@ __status__ = "Testing"
 class sessao:
     def __init__(self):
         self.clientHandler = Services.ClientHandler(self)
-        self.con = cliente_tcp(self.clientHandler)
-
         self.currentUser = Models.user()
 
         self.viewController = ViewController.MainViewController(self)
         self.viewController.loginActivity()
+        self.con = cliente_tcp(self.clientHandler)
+        self.con.conecta()
 
         self.viewController.mainloop()
 
