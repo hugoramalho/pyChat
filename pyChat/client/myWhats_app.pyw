@@ -9,12 +9,12 @@ from tkinter import *
 from tkinter import messagebox
 
 from pyChat.client.cliente_tcp.cliente_tcp import *
-from pyChat.client.pacotes_app.chatActivity import *
-from pyChat.client.pacotes_app.loginActivity import *
-from pyChat.client.pacotes_app.newUserActivity import *
-from pyChat.client.pacotes_app.addFriendActivity import *
+from pyChat.client.Views.chatActivity import *
+from pyChat.client.Views.loginActivity import *
+from pyChat.client.Views.newUserActivity import *
+from pyChat.client.Views.addFriendActivity import *
 
-#from pacotes_app import Models
+#from Views import Models
 
 
 

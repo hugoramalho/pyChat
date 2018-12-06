@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from pyChat.client.Models import Models
-from pyChat.client.pacotes_app.UIElements.Frames import chat_frame_ui
+from pyChat.client.Views.UIElements.Frames import chat_frame_ui
 
 
 class chat_frame(chat_frame_ui):

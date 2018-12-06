@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#  pacotes_app
+#  Views
 #
 #  Ramalho, HUGO <Ramalho@DESKTOP-MEI8G7T>
 

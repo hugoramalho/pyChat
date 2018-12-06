@@ -12,13 +12,10 @@ __all__ = ['sub_CBox', 'sub_Menu', 'wd_Entry', 'sub_Text', 'sub_Treeview', 'logi
 
 
 class login_ui(Frame):
-
     def __init__(self, framePai, **kwargs):
         super().__init__(framePai)
 
 
-
-        
         #Subtítulos do programa:
         #O subTitulo1 é declarado e "fixado"(.grid) dentro do frameLocal com o nome do programa:
         self.tit1 = Label(self, anchor = CENTER)#, width = 18)
@@ -124,7 +121,6 @@ class novo_user_ui(Frame):
 
     def config_tit1(self, **kwargs):
         self.tit1.config(**kwargs)
-        
 
     def config_B1(self, **kwargs):
         self.botao1.config(**kwargs)
@@ -146,11 +142,9 @@ class novo_user_ui(Frame):
 
 
 class chat_frame_ui(Frame):
-    
     def __init__(self, frame_pai):
         super().__init__(frame_pai)
 
-        
         self.menu_superior = Menu(self)
         frame_pai.config(menu=self.menu_superior)
         # ~ self.menu_superior.grid(row = 0, column = 0, columnspan = 10)
