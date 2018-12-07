@@ -1,88 +1,80 @@
 from pyChat.servidor.ServerPacks.Models import Models
-from pyChat.servidor.ServerPacks.Services import Mappers, DTP
+from pyChat.servidor.ServerPacks.Services import Mappers, DTP, Requests, Responses
 
 
 def MyRequestHandler(dictRequest: dict):
-    requestName = dictRequest['request']
 
-    if requestName == 'login':
-        login = Models.Login().fromJson(dictRequest)
+    request = DTP.DataTransferEval(dictRequest)
+
+    if isinstance(request, Requests.RequestLogin):
+        login = request.login
 
         feedback = Mappers.UserMapper().login(login)
         if isinstance(feedback, Models.user):
-            #login OK
-            response = DTP.Request(requestName, feedback)
+            # login OK
+            response = Responses.ResponseLogin(feedback)
             return response
         elif isinstance(feedback, Exception):
-            #ROTINA DE ENCAPSULAMENTO DE ERRO
-            response = DTP.InternalExceptions(requestName, feedback)
+            # ROTINA DE ENCAPSULAMENTO DE ERRO
+            response = DTP.InternalExceptions(Requests.RequestLogin(), feedback)
             return response
 
-    elif requestName == 'retrieve_friends':
-        user = Models.user().fromJson(dictRequest)
+    elif isinstance(request, Requests.RequestRetrieveFriends):
+        user = request.user
         feedback = Mappers.UserMapper().retrieveFriends(user)
         if isinstance(feedback, Models.LstUsers):
-            response = DTP.Request(requestName, feedback)
+            response = Responses.ResponseRetrieveFriends(feedback)
             return response
         elif isinstance(feedback, Exception):
-            response = DTP.InternalExceptions(requestName, feedback)
+            response = DTP.InternalExceptions(Requests.RequestRetrieveFriends(), feedback)
             return response
 
-    elif requestName == 'retrieve_chat':
-        userId = dictRequest['userId']
-        friendId = dictRequest['friendId']
-
-        feedback = Mappers.ChatMapper().retrieveChat(userId, friendId)
+    elif isinstance(request, Requests.RequestRetrieveChat):
+        feedback = Mappers.ChatMapper().retrieveChat(request.friendship)
         if isinstance(feedback, Models.LstMessages):
-            response = DTP.Request(requestName, feedback)
+            response = Responses.ResponseRetrieveChat(feedback)
             return response
         elif isinstance(feedback, Exception):
-            response = DTP.InternalExceptions(requestName, feedback)
+            response = DTP.InternalExceptions(Requests.RequestRetrieveChat(), feedback)
             return response
 
-    elif requestName == 'send_message':
-        message = Models.Message().fromJson(dictRequest)
-        feedback = Mappers.ChatMapper().insertMessage(message)
+    elif isinstance(request, Requests.RequestSendMessage):
+        feedback = Mappers.ChatMapper().insertMessage(request.message)
         if isinstance(feedback, Models.Message):
-            #MENSAGEM ALTERA O STATUS DE RECEPÇÃO NO CLIENTE REMETENTE PARA TRUE
-            #MENSAGEM É ENVIADA (ASSÍNCRONA) PARA O CLIENTE DESTINATÁRIO
-            response = DTP.Request(requestName, feedback)
+            # MENSAGEM ALTERA O STATUS DE RECEPÇÃO NO CLIENTE REMETENTE PARA TRUE
+            # MENSAGEM É ENVIADA (ASSÍNCRONA) PARA O CLIENTE DESTINATÁRIO
+            response = Responses.ResponseSendMessage(feedback)
             return response
         elif isinstance(feedback, Exception):
-            #ROTINA DE TRATAMENTO DE ERRO
-            #STATUS DE RECEPÇÃO DO CLIENTE SE MANTÉM INALTERADO (FALSE)
-            response = DTP.InternalExceptions(requestName, feedback)
+            # ROTINA DE TRATAMENTO DE ERRO
+            # STATUS DE RECEPÇÃO DO CLIENTE SE MANTÉM INALTERADO (FALSE)
+            response = DTP.InternalExceptions(Responses.ResponseSendMessage(), feedback)
             return response
 
-    elif requestName == 'new_user':
-        newUser = Models.user().fromJson(dictRequest)
-        feedback = Mappers.UserMapper().newUser(newUser)
+    elif isinstance(request, Requests.RequestNewUser):
+        feedback = Mappers.UserMapper().newUser(request.user)
         if isinstance(feedback, Models.user):
-            response = DTP.Request(requestName, feedback)
+            response = Responses.ResponseNewUser(feedback)
             return response
         elif isinstance(feedback, Exception):
-            #TRATAR OS ERROS AQUI
-            response = DTP.InternalExceptions(requestName, feedback)
+            # TRATAR OS ERROS AQUI
+            response = DTP.InternalExceptions(Responses.ResponseNewUser(), feedback)
             return response
 
-    elif requestName == 'namesLike':
-        namesLike = dictRequest['namesLike']
-        user = Models.user().fromJson(dictRequest['user'])
-        feedback = Mappers.UserMapper().namesLike(user, namesLike)
+    elif isinstance(request, Requests.RequestNamesLike):
+        feedback = Mappers.UserMapper().namesLike(request.user, request.namesLike)
         if isinstance(feedback, Models.LstUsers):
-            response = DTP.Request(requestName, feedback)
+            response = Responses.ResponseNamesLike(feedback)
             return response
         elif isinstance(feedback, Exception):
-            response = DTP.InternalExceptions(requestName, feedback)
+            response = DTP.InternalExceptions(Responses.ResponseNamesLike(), feedback)
             return response
 
-    elif requestName == 'addFriend':
-        friendEmail = dictRequest['friendEmail']
-        user = Models.user().fromJson(dictRequest['user'])
-        feedback = Mappers.UserMapper().addFriend(friendEmail, user)
+    elif isinstance(request, Requests.RequestAddFriend):
+        feedback = Mappers.UserMapper().addFriend(request.user, request.friendEmail)
         if isinstance(feedback, Models.user):
-            response = DTP.Request(requestName, feedback)
+            response = Responses.ResponseAddFriend(feedback)
             return response
         elif isinstance(feedback, Exception):
-            response = DTP.InternalExceptions(requestName, feedback)
+            response = DTP.InternalExceptions(Requests.RequestAddFriend(), feedback)
             return response

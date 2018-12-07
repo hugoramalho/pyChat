@@ -3,7 +3,7 @@ from pyChat.client.Models import Models
 
 
 class RequestLogin(DTP.DataTransfer):
-    def __init__(self, login:Models.Login = Models.Login()):
+    def __init__(self, login:Models.Login):
         super().__init__()
         self.user = login
 

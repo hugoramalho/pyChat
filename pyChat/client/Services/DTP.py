@@ -1,4 +1,6 @@
-from pyChat.client.Models import Models
+"""DATA TRANSFER PROTOCOLS"""
+
+from pyChat.servidor.ServerPacks.Models import Models
 
 class InternalExceptions:
     def __init__(self, requestName, exception: Exception or None = None):
@@ -17,12 +19,12 @@ class DataTransfer:
         self.exception = 0
 
     def toJson(self) -> dict:
-        dictJson = {}
-        dictJson['requestName'] = self.__class__.__name__
-        return {}
+        dictJson = {'requestName': self.__class__.__name__}
+        return self
 
     def fromJson(self, dictObj: dict):
         pass
+
 
 class DataTransferEval:
     def __init__(self, dictJson: dict):

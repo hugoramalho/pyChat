@@ -99,11 +99,8 @@ class chat_frame(chat_frame_ui):
 
     @property
     def __msg__(self):
-        present = datetime.now()
         message = Models.Message()
-        message.dateTime = present
-        message.sessionUserId = self.controller.session.currentUser.idd
-        message.senderUser = self.controller.session.currentUser
+        message.dateTime = datetime.now()
         message.recipUser = self.currentContactChat
         message.content = self.entr_msg.retorna_entr()
         return message

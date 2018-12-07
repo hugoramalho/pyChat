@@ -5,16 +5,10 @@
 #
 #  Ramalho <Ramalho@DESKTOP-MEI8G7T>
 #
-from tkinter import *
-from tkinter import messagebox
 
-from pyChat.client.cliente_tcp.ClientTCP import *
 from pyChat.client import Services
 from pyChat.client.Controller import ViewController
 from pyChat.client.Models import Models
-
-#from Views import Models
-
 
 
 
@@ -99,12 +93,12 @@ class Session:
         self.clientHandler.requestSendMessage(message)
 
     def requestNamesLike(self, namesLike:str):
-        self.clientHandler.requestNamesLike(namesLike)
+        currentUser = self.currentUser
+        self.clientHandler.requestNamesLike(currentUser, namesLike)
 
     def requestAddFriend(self, friendEmail:str):
-        self.clientHandler.requestAddFriend(friendEmail)
-
-
+        currentUser = self.currentUser
+        self.clientHandler.requestAddFriend(currentUser, friendEmail)
 
 
 class myWhats_app:

@@ -14,23 +14,26 @@ class ResponseLogin(DTP.DataTransfer):
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
         self.user = Models.user().fromJson(dictObj['user'])
+        return self
 
 
 class ResponseRetrieveChat(DTP.DataTransfer):
-    def __init__(self, senderUser:Models.user = Models.user(), recipUser:Models.user = Models.user()):
+    def __init__(self, friendship: Models.Friendship, lstMessages: Models.LstMessages):
         super().__init__()
-        self.senderUser = senderUser
-        self.recipUser = recipUser
+        self.friendship = friendship
+        self.lstMessages = Models.LstMessages()
 
     def toJson(self) -> dict:
         dictJson = super().toJson()
-        dictJson['senderUser'] = self.senderUser.toJson()
-        dictJson['recipUser'] = self.recipUser.toJson()
+        dictJson['friendship'] = self.friendship.toJson()
+        dictJson['lstMessages'] = self.lstMessages.toJson()
         return dictJson
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.lstMessages = Models.LstMessages().fromJson(dictObj['recipUser'])
+        self.friendship = Models.LstMessages().fromJson(dictObj['friendship'])
+        self.lstMessages = Models.LstMessages().fromJson(dictObj['lstMessages'])
+        return self
 
 
 class ResponseRetrieveFriends(DTP.DataTransfer):
@@ -48,6 +51,7 @@ class ResponseRetrieveFriends(DTP.DataTransfer):
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
         self.lstUsers = Models.LstUsers().fromJson(dictObj['lstUsers'])
+        return self
 
 
 class ResponseSendMessage(DTP.DataTransfer):
@@ -63,6 +67,7 @@ class ResponseSendMessage(DTP.DataTransfer):
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
         self.message = Models.Message().fromJson(dictObj)
+        return self
 
 
 class ResponseStatusMessage(DTP.DataTransfer):
@@ -78,6 +83,7 @@ class ResponseStatusMessage(DTP.DataTransfer):
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
         self.message = Models.Message().fromJson(dictObj)
+        return self
 
 
 class ResponseNewUser(DTP.DataTransfer):
@@ -92,6 +98,7 @@ class ResponseNewUser(DTP.DataTransfer):
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
         self.user = Models.user().fromJson(dictObj['user'])
+        return self
 
 
 class ResponseAddFriend(DTP.DataTransfer):
@@ -113,12 +120,13 @@ class ResponseAddFriend(DTP.DataTransfer):
         self.recipUser = Models.user().fromJson(dictObj['recipUser'])
         self.senderUser = Models.user().fromJson(dictObj['senderUser'])
         self.statusAcept = dictObj['statusAcept']
+        return self
 
 
 class ResponseNamesLike(DTP.DataTransfer):
-    def __init__(self, namesLike:str = ''):
+    def __init__(self, namesLike:str=''):
         super().__init__()
-        self.namesLike = ''
+        self.namesLike = namesLike
 
     def toJson(self):
         dictJson = super().toJson()
@@ -128,23 +136,23 @@ class ResponseNamesLike(DTP.DataTransfer):
     def fromJson(self, dictObj: dict or list):
         super().fromJson(dictObj)
         self.namesLike = Models.LstUsers().fromJson(dictObj)
+        return self
 
 
 class ResponseDeleteChat(DTP.DataTransfer):
-    def __init__(self, senderUser:Models.user = Models.user(), recipUser:Models.user = Models.user()):
+    def __init__(self, friendship: Models.Friendship):
         super().__init__()
-        self.senderUser = senderUser
-        self.recipUser = recipUser
+        self.friendship = friendship
 
     def toJson(self) -> dict:
         dictJson = super().toJson()
-        dictJson['senderUser'] = self.senderUser.toJson()
-        dictJson['recipUser'] = self.recipUser.toJson()
+        dictJson['friendship'] = self.friendship.toJson()
         return dictJson
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.lstMessages = Models.LstMessages().fromJson(dictObj['recipUser'])
+        self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
+        return self
 
 
 class ResponseDeleteMessage(DTP.DataTransfer):
@@ -161,7 +169,7 @@ class ResponseDeleteMessage(DTP.DataTransfer):
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
         self.info = dictObj['info']
-
+        return self
 
 class ResponseBlockUser(DTP.DataTransfer):
     def __init__(self, senderUser: Models.user = Models.user(), recipUser: Models.user = Models.user()):
@@ -184,6 +192,7 @@ class ResponseBlockUser(DTP.DataTransfer):
         super().fromJson(dictObj)
         self.recipUser = Models.user().fromJson(dictObj['recipUser'])
         self.senderUser = Models.user().fromJson(dictObj['senderUser'])
+        return self
 
 
 class ResponseUnblockUser(DTP.DataTransfer):
@@ -207,3 +216,4 @@ class ResponseUnblockUser(DTP.DataTransfer):
         super().fromJson(dictObj)
         self.recipUser = Models.user().fromJson(dictObj['recipUser'])
         self.senderUser = Models.user().fromJson(dictObj['senderUser'])
+        return self

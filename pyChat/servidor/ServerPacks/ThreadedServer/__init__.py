@@ -21,59 +21,45 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
         while self.con_status:
             self.dado = self.__receive__()
             # Abaixo, é obtido o tipo do dado entrante:
-            try:
-                print(self.dado)
-                requestName = self.dado['request']
-            except:
-                print('Requisição fora do padrão e/ou Cliente se desconectou')
-                requestName = 'finish'
 
-            if requestName == 'login':
-                feedback = MyRequestHandler(self.dado)
-                if isinstance(feedback, DTP.InternalExceptions) is not True:
-                    # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
-                    dictClient = {'client_address': self.client_address, 'client_id': feedback.data.idd, 'client': self.request}
-                    # Em seguida, dic_cliente é adicionado à lista de clientes
-                    self.__class__.lst_client.append(dictClient)
-                    print('Client has just made a connection! ', self.__class__.lst_client)
-                    self.__send__(feedback)
-                else:
-                    self.__send__(feedback)
-
-            elif requestName == 'send_message':
-                feedback = MyRequestHandler(self.dado)
-                if isinstance(feedback, DTP.Request):
-                    id_dest = feedback.data.recipId
-                    client_dest = self.__class__.search_client(id_dest)
-                    # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
-                    if client_dest is not None:
-                        # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
-                        self.__sendTo__(client_dest, feedback)
-                    self.__send__(feedback)
-                else:
-                    self.__send__(feedback)
+            print(self.dado)
+            response = MyRequestHandler(self.dado)
 
 
 
-            elif requestName == 'finish':
-                self.finish()
+            if isinstance(response, DTP.InternalExceptions):
+                self.__send__(response)
 
-            elif requestName == 'addFriend':
-                feedback = MyRequestHandler(self.dado)
-                if isinstance(feedback, DTP.Request):
-                    idFriend = feedback.data.idd
-                    client_dest = self.__class__.search_client(idFriend)
-                    # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
-                    if client_dest is not None:
-                        # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
-                        self.__sendTo__(client_dest, feedback)
-                    self.__send__(feedback)
-                else:
-                    self.__send__(feedback)
+            if isinstance(response, Responses.ResponseLogin):
+                # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
+                dictClient = {'client_address': self.client_address, 'client_id': feedback.data.idd, 'client': self.request}
+                # Em seguida, dic_cliente é adicionado à lista de clientes
+                self.__class__.lst_client.append(dictClient)
+                print('Client has just made a connection! ', self.__class__.lst_client)
+                self.__send__(response)
+
+
+            elif isinstance(response, Responses.ResponseSendMessage):
+                recipId = response.message.recipId
+                socketRecipUser = self.__class__.search_client(recipId)
+                # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
+                if socketRecipUser is not None:
+                    # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
+                    self.__sendTo__(socketRecipUser, response)
+                self.__send__(response)
+
+
+            elif isinstance(response, Responses.ResponseAddFriend):
+                recipId = response.friendship.recipUser.idd
+                socketRecipUser = self.__class__.search_client(recipId)
+                # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
+                if socketRecipUser is not None:
+                    # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
+                    self.__sendTo__(socketRecipUser, response)
+                self.__send__(response)
 
             else:
-                feedback = MyRequestHandler(self.dado)
-                self.__send__(feedback)
+                self.__send__(response)
 
     def __sendTo__(self, socketRequest, obj: DTP.DataTransfer or DTP.InternalExceptions):
         try:

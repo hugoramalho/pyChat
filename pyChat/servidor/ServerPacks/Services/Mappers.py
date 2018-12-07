@@ -224,7 +224,10 @@ class ChatMapper(DataMapper):
         sql = 'DROP TABLE ' + tableName + ';'
         return self.__execute_commit__(sql)
 
-    def retrieveChat(self, userId, friendId):
+    def retrieveChat(self, friendship: Models.Friendship):
+        userId = friendship.senderUser.idd
+        friendId = friendship.recipUser.idd
+
         # Método que busca a conversa de dois usuários dados
         # Como a tabela foi criada pelo método newChat(), o nome dela respeita a lógica seguinte:
         if int(userId) > int(friendId):
