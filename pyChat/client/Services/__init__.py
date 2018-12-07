@@ -2,50 +2,44 @@ import json
 from tkinter import messagebox
 #from pyChat.client.pyChatApp import sessao
 from pyChat.client.Models import Models
-
+from . import Responses, DTP
 
 class ClientHandler:
     def __init__(self, session):
         self.session = session
 
-        self.request = None
+        self.response = DTP.DataTransfer()
 
     def handle(self, data):
-        self.request = json.loads(data.decode())
+        # A REQUISIÇÃO É CARREGADA EM UM dict
+        dictJson = json.loads(data.decode())
+        # E O dict É ENVIADO À CLASSE RESPONSÁVEL POR INSTANCIAR A REQUEST (BUILDER PATTERN)
+        response = DTP.DataTransferEval(dictJson).eval()
 
-        if self.request['exception'] == 1:
-            self.exceptionHandler(Exception(self.request['errorName']))
+        if isinstance(response, DTP.InternalExceptions):
+            self.exceptionHandler(Exception(response.errorName))
 
         else:
-            requestName = self.request['request']
+            if isinstance(response, Responses.ResponseLogin):
+                self.session.login(response.user)
 
-            if requestName == 'login':
-                user = Models.user().fromJson(self.request['data'])
-                self.session.login(user)
+            elif isinstance(response, Responses.ResponseRetrieveFriends):
+                self.session.setContatos(response.lstUsers)
 
-            elif requestName == 'retrieve_friends':
-                lstFriendsUser = Models.LstUsers().fromJson(self.request['data'])
-                self.session.setContatos(lstFriendsUser)
+            elif isinstance(response, Responses.ResponseSendMessage):
+                self.session.receiveMessage(response.message)
 
-            elif requestName == 'send_message':
-                message = Models.Message().fromJson(self.request['data'])
-                self.session.receiveMessage(message)
+            elif isinstance(response, Responses.ResponseRetrieveChat):
+                self.session.retrieveChat(response.lstMessages)
 
-            elif requestName == 'retrieve_chat':
-                lstMessages = Models.LstMessages().fromJson(self.request['data'])
-                self.session.retrieveChat(lstMessages)
+            elif isinstance(response, Responses.ResponseNamesLike):
+                self.session.namesLike(response.namesLike)
 
-            elif requestName == 'namesLike':
-                lstUsers = Models.LstUsers().fromJson(self.request['data'])
-                self.session.namesLike(lstUsers)
+            elif isinstance(response, Responses.ResponseNewUser):
+                self.session.newUserOK(response.user)
 
-            elif requestName == 'new_user':
-                user = Models.user().fromJson(self.request['data'])
-                self.session.newUserOK(user)
-
-            elif requestName == 'addFriend':
-                friend = Models.user().fromJson(self.request['data'])
-                self.session.addFriend(friend)
+            elif isinstance(response, Responses.ResponseAddFriend):
+                self.session.addFriend(response.recipUser)
 
             else:
                 self.session.reportException(Exception('Requisiçao não recuperada!'))

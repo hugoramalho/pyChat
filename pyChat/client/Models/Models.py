@@ -268,6 +268,27 @@ class user(AppModel):
         else:
             raise Exception('Senha deve ser tipo String.')
 
+class Friendship(AppModel):
+    def __init__(self, senderUser: user = user(), recipUser: user = user()):
+        super().__init__()
+        self.senderUser = senderUser
+        self.recipUser = recipUser
+        self.blocked = False
+        self.accepted = False
+
+    def toJson(self):
+        dictJson = {'senderUser': self.senderUser.toJson(),
+                    'recipUser': self.recipUser.toJson(),
+                    'blocked': self.blocked,
+                    'accepted': self.accepted}
+        return dictJson
+
+    def fromJson(self, dictJson: dict):
+        self.senderUser = dictJson['password']
+        self.recipUser = dictJson['userEmail']
+        self.blocked = dictJson['blocked']
+        self.accepted = dictJson['accepted']
+        return self
 
 class Login(AppModel):
     def __init__(self):

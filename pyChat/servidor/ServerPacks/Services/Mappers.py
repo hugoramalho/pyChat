@@ -8,6 +8,7 @@ class DataMapper(SqliteServer.sqliteConn):
 
     def createTables(self):
         sql = 'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, userEmail VARCHAR(40) UNIQUE, userName VARCHAR(50), password VARCHAR(6))'
+        sql = 'CREATE TABLE IF NOT EXISTS notifications(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(40) UNIQUE)'
         self.__execute_commit__(sql)
 
 class UserMapper(DataMapper):
@@ -22,8 +23,16 @@ class UserMapper(DataMapper):
         if feedback == 0:
             newUser = self.searchUser(user.userEmail)
             tableName = 'friends_' + str(newUser.idd)
-            sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id_friend INTEGER UNIQUE, FOREIGN KEY(id_friend) REFERENCES users(id));'
-            feedback = self.__execute_commit__(sql)
+            sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id_friend INTEGER UNIQUE, confirmation INTEGER, FOREIGN KEY(id_friend) REFERENCES users(id));'
+
+            #tableName = 'notifications_' + str(newUser.idd)
+            #sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id INTEGER PRIMARY KEY AUTOINCREMENT, id_type INTEGER, statusRead INTEGER, FOREIGN KEY(id_type) REFERENCES notifications(id));'
+            #feedback = self.__execute_commit__(sql)
+
+            #tableName = 'blocks_' + str(newUser.idd)
+            #sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id_block INTEGER UNIQUE, FOREIGN KEY(id_friend) REFERENCES users(id));'
+            #feedback = self.__execute_commit__(sql)
+
 
             if feedback == 0:
                 return newUser
@@ -203,7 +212,7 @@ class ChatMapper(DataMapper):
             tableName = 'chat_' + str(id_user1) + '_' + str(id_user2)
         elif id_user2 > id_user1:
             tableName = 'chat_' + str(id_user2) + '_' + str(id_user1)
-        sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id INTEGER PRIMARY KEY AUTOINCREMENT, id_dest INTEGER, id_remete INTEGER, data_hora datetime, conteudo TEXT, FOREIGN KEY(id_dest) REFERENCES users(id), FOREIGN KEY(id_remete) REFERENCES users(id))'
+        sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id INTEGER PRIMARY KEY AUTOINCREMENT, id_dest INTEGER, id_remete INTEGER, data_hora datetime, conteudo TEXT, statusRead INTEGER, statusReceived INTEGER, FOREIGN KEY(id_dest) REFERENCES users(id), FOREIGN KEY(id_remete) REFERENCES users(id))'
         return self.__execute_commit__(sql)
 
 
