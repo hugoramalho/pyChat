@@ -273,8 +273,8 @@ class Friendship(AppModel):
         super().__init__()
         self.senderUser = senderUser
         self.recipUser = recipUser
-        self.blocked = False
-        self.accepted = False
+        self.blocked = 0
+        self.accepted = 0
 
     def toJson(self):
         dictJson = {'senderUser': self.senderUser.toJson(),

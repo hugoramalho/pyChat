@@ -1,11 +1,11 @@
 from tkinter import Tk, messagebox
 
-from pyChat.client.pyChatApp import sessao
-from pyChat.client.Views import chatActivity, addFriendActivity, helpActivity, loginActivity, newUserActivity
+from pyChat.client.pyChatApp import Session
+from pyChat.client.Views import chatActivity, addFriendActivity, helpActivity, loginActivity, newUserActivity, friendshipRequestActivity
 from pyChat.client.Models import Models
 
 class MainViewController(Tk):
-    def __init__(self, session:sessao):
+    def __init__(self, session:Session):
         super().__init__()
         self.title("pyChat")
         self.resizable(0, 0)
@@ -19,10 +19,10 @@ class MainViewController(Tk):
 
     def loginActivity(self):
         self.destroyChildrenFrames()
-        frame = loginActivity.login_frame(self, self)
+        frame = loginActivity.loginActivity(self, self)
         frame.grid(row=0, column=0, sticky="nsew", ipadx=14, padx=25, pady=25)
         frame.tkraise()
-        self.activityFrames['login_frame'] = frame
+        self.activityFrames['loginActivity'] = frame
 
     def newUserActivity(self):
         self.destroyChildrenFrames()
@@ -50,6 +50,10 @@ class MainViewController(Tk):
         self.activityFrames['ajuda_frame'] = frame
         frame.tkraise()
 
+    def friendshipRequestActv(self, friendship:Models.Friendship):
+        self.activityFrames['friendshipRequestActivity'] = friendshipRequestActivity.friendshipRequestActivity(self)
+        self.activityFrames['friendshipRequestActivity'].requestFriendship(friendship)
+
     def addFriendActivity(self):
         frame = addFriendActivity.addFrame_ui(self)
         # frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
@@ -75,41 +79,37 @@ class MainViewController(Tk):
         self.activityFrames['chat_frame'].addFriendList(friend)
 
     def requestLogin(self, login: Models.Login):
-        dictRequest=login.toJson()
-        dictRequest['request'] = 'login'
-        self.session.sendRequest(dictRequest)
+        self.session.requestLogin(login)
 
     def requestNewUser(self, user: Models.user):
-        dictRequest = user.toJson()
-        dictRequest['request'] = 'new_user'
-        self.session.sendRequest(dictRequest)
+        self.session.requestNewUser(user)
 
     def requestRetrieveChat(self, userFriend: Models.user):
-        friendId = userFriend.idd
-        userId = self.session.currentUser.idd
-        dictRequest = {'request': 'retrieve_chat', 'userId': userId, 'friendId': friendId}
-        # Envia a requisição:
-        self.session.sendRequest(dictRequest)
+        self.session.requestRetrieveChat(userFriend)
 
     def requestRetrieveFriends(self):
-        dictRequest = self.session.currentUser.toJson()
-        dictRequest['request'] = 'retrieve_friends'
-        # Envia e recebe feedback do servidor:
-        self.session.sendRequest(dictRequest)
+        self.session.requestRetrieveFriends()
+
+    def requestFriendshipAcepted(self, friendship: Models.Friendship):
+            self.session.requestFriendshipAcepted(friendship)
 
     def requestSendMessage(self, message: Models.Message):
-        dictRequest = message.toJson()
-        dictRequest['request']= 'send_message'
-        # Envia e recebe feedback do servidor:
-        self.session.sendRequest(dictRequest)
+        self.session.requestSendMessage(message)
 
     def requestNamesLike(self, namesLike):
-        dic_req = {'request': 'namesLike', 'namesLike': namesLike, 'user': self.session.currentUser.toJson()}
-        self.session.sendRequest(dic_req)
+        self.session.requestNamesLike(namesLike)
 
     def requestAddFriend(self, friendEmail:str):
-        dictRequest = {'friendEmail': friendEmail, 'user': self.session.currentUser.toJson(), 'request': 'addFriend'}
-        self.session.sendRequest(dictRequest)
+        self.session.requestAddFriend(friendEmail)
+
+    def showErrorMessage(self, exceptionTitle: str, exception: str):
+        messagebox.showerror('Erro!', exception)
+
+    def showWarningMessage(self, warningTitle:str, warning:str):
+        messagebox.showwarning('Atenção!', warning)
+
+    def showInfoMessage(self, infoTitle:str, info:str):
+        messagebox.showwarning('Atenção!', info)
 
     def destroyChildrenFrames(self):
         if self.winfo_children():
@@ -120,12 +120,3 @@ class MainViewController(Tk):
                 elemFrame.destroy()
         else:
             return None
-
-    def showErrorMessage(self, exceptionTitle: str, exception: str):
-        messagebox.showerror('Erro!', exception)
-
-    def showWarningMessage(self, warningTitle:str, warning:str):
-        messagebox.showwarning('Atenção!', warning)
-
-    def showInfoMessage(self, infoTitle:str, info:str):
-        messagebox.showwarning('Atenção!', info)

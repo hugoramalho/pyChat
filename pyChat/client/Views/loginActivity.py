@@ -2,7 +2,7 @@ from pyChat.client.Models import Models
 from pyChat.client.Views.UIElements.Frames import login_ui, ajuda_frame_ui
 
 
-class login_frame(login_ui):
+class loginActivity(login_ui):
     
     def __init__(self, frame_pai, controller):
         

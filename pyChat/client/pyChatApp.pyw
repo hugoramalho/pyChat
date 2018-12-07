@@ -28,16 +28,12 @@ __email__ = "ramalho.hg@gmail.com"
 __status__ = "Testing"
 
 
-class sessao:
+class Session:
     def __init__(self):
-        self.clientHandler = Services.ClientHandler(self)
+        self.clientHandler = Services.ClientRequestManager(self)
         self.currentUser = Models.user()
-
         self.viewController = ViewController.MainViewController(self)
         self.viewController.loginActivity()
-        self.con = cliente_tcp(self.clientHandler)
-        self.con.conecta()
-
         self.viewController.mainloop()
 
     def login(self, user: Models.user):
@@ -52,6 +48,10 @@ class sessao:
             pass
         else:
             self.viewController.receiveMessage(message)
+
+    def friendshipRequest(self, friendship:Models.Friendship):
+        if friendship.recipUser.idd == self.currentUser.idd:
+            self.viewController.friendshipRequestActv(friendship)
 
     def retrieveChat(self, lstMessages:Models.LstMessages):
         self.viewController.retrieveChat(lstMessages)
@@ -70,18 +70,40 @@ class sessao:
             self.viewController.showInfoMessage('Contato adicionado!', 'Contato '+friend.userName+
                                                 ' adicionado com sucesso!\nE-mail: '+friend.userEmail)
 
-
     def reportException(self, exception: Exception):
         self.viewController.showInfoMessage('Oh Oh', str(exception))
 
-    def conecta(self):
-        try:
-            self.con.connect()
-        except Exception as Expt:
-            self.reportException(Expt)
+    def requestLogin(self, login: Models.Login):
+        self.clientHandler.requestLogin(login)
 
-    def sendRequest(self, request:dict):
-        self.con.sendRequest(request)
+    def requestNewUser(self, user: Models.user):
+        self.clientHandler.requestNewUser(user)
+
+    def requestRetrieveChat(self, friendship: Models.Friendship):
+        friendship.senderUser = self.currentUser
+        self.clientHandler.requestRetrieveChat(friendship)
+
+    def requestRetrieveFriends(self):
+        currentUser = self.currentUser
+        self.clientHandler.requestRetrieveFriends(currentUser)
+
+    def requestFriendshipAcepted(self, friendship: Models.Friendship):
+        # VERIFICAÇÃO FEITA:
+        if friendship.recipUser.idd == self.currentUser.idd and friendship.accepted == 1 and friendship.blocked == 0:
+            self.clientHandler.requestFriendshipAcepted(friendship)
+        else:
+            self.viewController.showErrorMessage('Oh Oh!', 'Erro ao processar a requisição:\n'+str(friendship))
+
+    def requestSendMessage(self, message: Models.Message):
+        message.senderUser = self.currentUser
+        self.clientHandler.requestSendMessage(message)
+
+    def requestNamesLike(self, namesLike:str):
+        self.clientHandler.requestNamesLike(namesLike)
+
+    def requestAddFriend(self, friendEmail:str):
+        self.clientHandler.requestAddFriend(friendEmail)
+
 
 
 
@@ -91,7 +113,7 @@ class myWhats_app:
         Unidade funcional do programa encapsulada numa classe.
     """
     def __init__(self):
-        self.sessao_atv = sessao()
+        self.sessao_atv = Session()
 
 def main():
     app = myWhats_app()
