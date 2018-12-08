@@ -184,7 +184,7 @@ class UserMapper(DataMapper):
     def retrieveFriends(self, user:Models.user):
         id_user = user.idd
         tableName = 'friends_' + str(id_user)
-        sql = 'SELECT id_friend,  userName, userEmail, showNotification, dateAdd FROM ' + tableName + ' INNER JOIN users ON (' + tableName + '.id_friend = users.id);'
+        sql = 'SELECT id_friend,  userName, userEmail, showNotification, dateAdd FROM ' + tableName + ' INNER JOIN users ON (' + tableName + '.id_friend = users.id)  WHERE confirmation = 1;'
         lst_tupl = self.__execute_fetchall__(sql)
 
         if isinstance(lst_tupl, Exception):
@@ -275,6 +275,37 @@ class UserMapper(DataMapper):
                 return commitFeedback
         elif isinstance(commitFeedback, Exception):
             return commitFeedback
+
+    def friendshipRequests(self, user:Models.user):
+        tableNotifications = 'notifications_' + str(user.idd)
+        tableBlocks = 'blocks_' + str(user.idd)
+        tableNotShowNotfications = 'notShowNotfications_'+str(user.idd)
+
+        id_user = user.idd
+        tableName = 'friends_' + str(id_user)
+        sql = 'SELECT id_friend,  userName, userEmail, showNotification, dateAdd FROM ' + tableName + ' INNER JOIN users ON (' + tableName + '.id_friend = users.id) WHERE confirmation = 0;'
+        lst_tupl = self.__execute_fetchall__(sql)
+
+        if isinstance(lst_tupl, Exception):
+            return lst_tupl
+        elif lst_tupl is None:
+            return Exception('Friends list not found')
+
+        else:
+            lstUser = Models.LstUsers()
+            for elem in lst_tupl:
+                friendUser = Models.user()
+                friendUser.idd = int(elem[0])
+                friendUser.userName = elem[1]
+                friendUser.userEmail = elem[2]
+                friendUser.showNotification = elem[3]
+                friendUser.dateAdd = elem[4]
+                lstUser.append(friendUser)
+            return lstUser
+
+
+
+
 
 class ChatMapper(DataMapper):
     def __init__(self):
