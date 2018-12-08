@@ -174,12 +174,9 @@ class UserMapper(DataMapper):
                         return friendship
                     elif isinstance(commitFeedback, Exception):
                         return commitFeedback
-
                 elif int(id) == senderId:
                     #CASO CONSTE NA LISTA DE BLOQUEIOS:
                     return Exception('Usuário não encontrado!')
-
-
         else:
             return Exception('Usuário não encontrado!')
 
@@ -296,8 +293,8 @@ class ChatMapper(DataMapper):
         # PRIMEIRO É VERIFICADO SE O PEDIDO DE AMIZADE FOI ACEITO
         tableFriends = 'friends_' + str(friendship.senderUser.idd)
         sql = 'SELECT confirmation FROM '+tableFriends+ ' WHERE id_friend = '+str(friendship.recipUser.idd)+';'
-        confirmation = self.__execute_fetchone__(sql)
-        if confirmation == 1:
+        confirmation = self.__select_fetchone__(sql)
+        if int(confirmation[0]) == 1:
             userId = friendship.senderUser.idd
             friendId = friendship.recipUser.idd
             # Método que busca a conversa de dois usuários dados
