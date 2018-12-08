@@ -6,11 +6,9 @@
 #  Ramalho <Ramalho@DESKTOP-MEI8G7T>
 #
 
-from pyChat.client import Services
+from pyChat import Services
+from pyChat.Models import Models
 from pyChat.client.Controller import ViewController
-from pyChat.client.Models import Models
-
-
 
 __author__ = "Ramalho, Hugo"
 __copyright__ = "Copyright 2017, Trabalho de Redes -  myWhats_app.py"
@@ -43,20 +41,20 @@ class Session:
         else:
             self.viewController.receiveMessage(message)
 
-    def friendshipRequest(self, friendship:Models.Friendship):
+    def friendshipRequest(self, friendship: Models.Friendship):
         if friendship.recipUser.idd == self.currentUser.idd:
             self.viewController.friendshipRequestActv(friendship)
 
-    def retrieveChat(self, lstMessages:Models.LstMessages):
+    def retrieveChat(self, lstMessages: Models.LstMessages):
         self.viewController.retrieveChat(lstMessages)
 
-    def namesLike(self, lstUsers:Models.LstUsers):
+    def namesLike(self, lstUsers: Models.LstUsers):
         self.viewController.namesLike(lstUsers)
 
-    def newUserOK(self, user:Models.user):
+    def newUserOK(self, user: Models.user):
         self.viewController.showInfoMessage('Usuário adicionado!', 'Usuário cadastrado com sucesso!')
 
-    def addFriend(self, friend:Models.user):
+    def addFriend(self, friend: Models.user):
         if friend.idd == self.currentUser.idd:
             self.viewController.addFriend(friend)
         else:
@@ -73,8 +71,8 @@ class Session:
     def requestNewUser(self, user: Models.user):
         self.clientHandler.requestNewUser(user)
 
-    def requestRetrieveChat(self, friendship: Models.Friendship):
-        friendship.senderUser = self.currentUser
+    def requestRetrieveChat(self, friend: Models.user):
+        friendship = Models.Friendship(self.currentUser, friend)
         self.clientHandler.requestRetrieveChat(friendship)
 
     def requestRetrieveFriends(self):

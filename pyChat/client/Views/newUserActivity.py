@@ -1,4 +1,4 @@
-from pyChat.client.Models import Models
+from pyChat.Models import Models
 from pyChat.client.Views.UIElements.Frames import novo_user_ui
 
 

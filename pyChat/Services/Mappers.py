@@ -1,4 +1,4 @@
-from pyChat.servidor.ServerPacks.Models import Models
+from pyChat.Models import Models
 from pyChat.servidor.ServerPacks import SqliteServer
 
 
@@ -129,7 +129,7 @@ class UserMapper(DataMapper):
         else:
             return Exception('User not found')
 
-    def addFriend(self, friendEmail:str, user:Models.user):
+    def addFriend(self, user:Models.user, friendEmail:str):
         if self.searchUser(friendEmail) != None:
             friend = self.searchUser(friendEmail)
             if isinstance(friend, Exception):

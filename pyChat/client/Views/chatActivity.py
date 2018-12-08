@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from pyChat.client.Models import Models
+from pyChat.Models import Models
 from pyChat.client.Views.UIElements.Frames import chat_frame_ui
-
 
 
 class chat_frame(chat_frame_ui):
@@ -25,7 +24,7 @@ class chat_frame(chat_frame_ui):
         self.config_ajuda2(command=lambda: self.__raise_sobre__())
         self.botao_envia.config(command=lambda: self.__envia_msg__())
         self.entr_msg.bind('<KeyRelease-Return>', lambda event: self.__envia_msg__())
-        self.contatos_treeview.bind('<<TreeviewSelect>>', lambda event: self.__carrega_contato__())
+        self.contatos_treeview.bind('<<TreeviewSelect>>', lambda event: self.__retrieve_chat__())
         self.add_contato_button.config(command=lambda: self.__add_contato__())
 
         self.entr_contatos.bind('<KeyRelease>', lambda event: self.__search_contacts__())
@@ -56,10 +55,13 @@ class chat_frame(chat_frame_ui):
     def addFriendList(self, friend: Models.user):
         self.controller.requestRetrieveFriends()
 
-    def __carrega_contato__(self):
+    def __retrieve_chat__(self):
         # Caso haja seleção de contato na lista, a id do contato selecionado é capturada:
         self.idUserSelected = self.contatos_treeview.idd_selection_treeView()
         self.currentContactChat = self.userFriendsList.searchId(self.idUserSelected)
+
+        self.controller.requestRetrieveChat(self.currentContactChat)
+
         self.conversa_treeview.config_tit_treeView('Conversa com: ' + self.currentContactChat.userName)
 
         # O botão de enviar mensagens é habilitado:
@@ -69,7 +71,8 @@ class chat_frame(chat_frame_ui):
         self.entr_msg.limpa_entr()
 
         # A lista de conversas daquele contato é carregada:
-        self.controller.requestRetrieveChat(self.currentContactChat)
+
+
 
     def fill_search_contacts_like(self, lstUsersLike: Models.LstUsers):
         if (lstUsersLike != []):

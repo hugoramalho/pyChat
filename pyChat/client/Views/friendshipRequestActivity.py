@@ -1,6 +1,17 @@
-from pyChat.client.Models import Models
+from pyChat.Models import Models
 #from .UIElements import *
+# from .UIElements import *
 import tkinter
+
+from pyChat.Models import Models
+# from .UIElements import *
+# from .UIElements import *
+import tkinter
+
+
+
+from pyChat.Models import Models
+
 
 #class friendshipRequestActivity(friendshipRequestLayot):
 class friendshipRequestActivity(tkinter.Toplevel):

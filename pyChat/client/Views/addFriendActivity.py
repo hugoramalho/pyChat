@@ -1,7 +1,7 @@
 from tkinter import messagebox
 
+from pyChat.Models import Models
 from pyChat.client.Views.UIElements import Frames
-from pyChat.client.Models import Models
 
 
 class addFrame_ui(Frames.AddFriendFrame):

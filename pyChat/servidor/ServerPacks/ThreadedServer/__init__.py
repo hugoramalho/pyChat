@@ -2,7 +2,7 @@ import json
 import socketserver
 import threading
 
-from pyChat.servidor.ServerPacks.Services.Handler import *
+from pyChat.Services.Handler import *
 
 
 class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
@@ -32,7 +32,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
             if isinstance(response, Responses.ResponseLogin):
                 # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
-                dictClient = {'client_address': self.client_address, 'client_id': feedback.data.idd, 'client': self.request}
+                dictClient = {'client_address': self.client_address, 'client_id': response.user.idd, 'client': self.request}
                 # Em seguida, dic_cliente é adicionado à lista de clientes
                 self.__class__.lst_client.append(dictClient)
                 print('Client has just made a connection! ', self.__class__.lst_client)
@@ -72,6 +72,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
     def __send__(self, obj: DTP.DataTransfer or DTP.InternalExceptions):
         try:
+            print(obj)
             obj = obj.toJson()
             dado_str = json.dumps(obj)
             dado_bytes = bytes(dado_str, "utf-8")

@@ -1,15 +1,17 @@
-from pyChat.servidor.ServerPacks.Models import Models
-from pyChat.servidor.ServerPacks.Services import Mappers, DTP, Requests, Responses
+from pyChat.Services import Mappers
+from pyChat.Models import Models
+from pyChat.Services import DTP, Requests, Responses
 
 
 def MyRequestHandler(dictRequest: dict):
 
-    request = DTP.DataTransferEval(dictRequest)
+    request = Requests.DataTransferEval(dictRequest).eval()
 
     if isinstance(request, Requests.RequestLogin):
-        login = request.login
+        login = request.user
 
         feedback = Mappers.UserMapper().login(login)
+        print('tipo aqui' +str(feedback))
         if isinstance(feedback, Models.user):
             # login OK
             response = Responses.ResponseLogin(feedback)

@@ -1,8 +1,10 @@
 from tkinter import Tk, messagebox
 
+from pyChat.Models import Models
+from pyChat.client.Views import chatActivity, addFriendActivity, helpActivity, loginActivity, newUserActivity, \
+    friendshipRequestActivity
 from pyChat.client.pyChatApp import Session
-from pyChat.client.Views import chatActivity, addFriendActivity, helpActivity, loginActivity, newUserActivity, friendshipRequestActivity
-from pyChat.client.Models import Models
+
 
 class MainViewController(Tk):
     def __init__(self, session:Session):
@@ -50,7 +52,7 @@ class MainViewController(Tk):
         self.activityFrames['ajuda_frame'] = frame
         frame.tkraise()
 
-    def friendshipRequestActv(self, friendship:Models.Friendship):
+    def friendshipRequestActv(self, friendship: Models.Friendship):
         self.activityFrames['friendshipRequestActivity'] = friendshipRequestActivity.friendshipRequestActivity(self)
         self.activityFrames['friendshipRequestActivity'].requestFriendship(friendship)
 
@@ -69,13 +71,13 @@ class MainViewController(Tk):
     def receiveMessage(self, message: Models.Message):
         self.activityFrames['chat_frame'].append_msg(message)
 
-    def retrieveChat(self, lstMessages:Models.LstMessages):
+    def retrieveChat(self, lstMessages: Models.LstMessages):
         self.activityFrames['chat_frame'].carrega_msg(lstMessages)
 
-    def namesLike(self, lstUsers:Models.LstUsers):
+    def namesLike(self, lstUsers: Models.LstUsers):
         self.activityFrames['chat_frame'].fill_search_contacts_like(lstUsers)
 
-    def addFriend(self, friend:Models.user):
+    def addFriend(self, friend: Models.user):
         self.activityFrames['chat_frame'].addFriendList(friend)
 
     def requestLogin(self, login: Models.Login):
