@@ -144,7 +144,7 @@ class RequestFriendshipAcepted(DTP.DataTransfer):
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.friendship = Models.Friendship().fromJson(dictObj)
+        self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
         return self
 
 

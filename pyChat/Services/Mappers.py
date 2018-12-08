@@ -126,8 +126,8 @@ class UserMapper(DataMapper):
         tableSender = 'friends_' + str(senderUserId)
         tableRecip = 'friends_' + str(recipUserId)
 
-        sql1 = 'UPDATE '+tableSender+' SET CONFIRMATION = 1 WHERE id_friend = '+str(recipUserId)+';'
-        sql2 = 'UPDATE ' + tableRecip + ' SET CONFIRMATION = 1 WHERE id_friend = '+str(senderUserId)+';'
+        sql1 = 'UPDATE '+tableSender+' SET CONFIRMATION = 1 WHERE id_friend = '+recipUserId+';'
+        sql2 = 'UPDATE ' + tableRecip + ' SET CONFIRMATION = 1 WHERE id_friend = '+senderUserId+';'
 
         commitFeedback = self.__execute_transaction__(sql1+sql2)
         if commitFeedback == 0:
@@ -294,7 +294,9 @@ class ChatMapper(DataMapper):
 
     def retrieveChat(self, friendship: Models.Friendship):
         # PRIMEIRO É VERIFICADO SE O PEDIDO DE AMIZADE FOI ACEITO
-        confirmation = friendship.accepted
+        tableFriends = 'friends_' + str(friendship.senderUser.idd)
+        sql = 'SELECT confirmation FROM '+tableFriends+ ' WHERE id_friend = '+str(friendship.recipUser.idd)+';'
+        confirmation = self.__execute_fetchone__(sql)
         if confirmation == 1:
             userId = friendship.senderUser.idd
             friendId = friendship.recipUser.idd

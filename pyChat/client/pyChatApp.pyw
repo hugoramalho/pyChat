@@ -41,9 +41,11 @@ class Session:
         else:
             self.viewController.receiveMessage(message)
 
-    def friendshipRequest(self, friendship: Models.Friendship):
+    def freindshipRequest(self, friendship: Models.Friendship):
         if friendship.recipUser.idd == self.currentUser.idd:
             self.viewController.friendshipRequestActv(friendship)
+        else:
+            self.viewController.friendshipRequestFeedbackActv(friendship)
 
     def retrieveChat(self, lstMessages: Models.LstMessages):
         self.viewController.retrieveChat(lstMessages)
@@ -61,6 +63,28 @@ class Session:
             self.viewController.addFriend(friend)
             self.viewController.showInfoMessage('Contato adicionado!', 'Contato '+friend.userName+
                                                 ' adicionado com sucesso!\nE-mail: '+friend.userEmail)
+
+    def ResponseAddFriend(self, friendship:Models.Friendship):
+        recipId = friendship.recipUser.idd
+        senderId = friendship.senderUser.idd
+        if self.currentUser.idd == recipId:
+            self.viewController.friendshipRequestReceived(friendship)
+        elif self.currentUser.idd == senderId:
+            self.reportFriendshipSent(friendship)
+
+    def reportFriendshipAcepted(self, friendship:Models.Friendship):
+        recipName = friendship.recipUser.userName
+        recipEmail = friendship.recipUser.userEmail
+        self.viewController.showInfoMessage('Pedido aceito!','O usuário '+recipName+
+                                            '\nde E-mail: '+recipEmail+
+                                            '\nAceitou seu pedido de amizade!' )
+
+    def reportFriendshipSent(self, friendship:Models.Friendship):
+        recipName = friendship.recipUser.userName
+        recipEmail = friendship.recipUser.userEmail
+        self.viewController.showInfoMessage('Pedido enviado!','O usuário '+recipName+
+                                            '\nde E-mail: '+recipEmail+
+                                            '\nrecebeu seu pedido de amizade!' )
 
     def reportException(self, exception: Exception):
         self.viewController.showInfoMessage('Oh Oh', str(exception))
@@ -98,8 +122,8 @@ class Session:
         currentUser = self.currentUser
         self.clientHandler.requestAddFriend(currentUser, friendEmail)
 
-    def requestFriendshipAcepted(self, friendship:Models.Friendship):
-        self.clientHandler.requestFriendshipAcepted(friendship)
+
+
 
 
 class myWhats_app:

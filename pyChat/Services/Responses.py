@@ -24,8 +24,6 @@ class InternalExceptions(DTP.DataTransfer):
         return self
 
 
-
-
 class DataTransferEval:
     def __init__(self, dictJson: dict):
         self.dictJson = dictJson
@@ -143,7 +141,7 @@ class ResponseAddFriend(DTP.DataTransfer):
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.friendship = Models.user().fromJson(dictObj['friendship'])
+        self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
         return self
 
 
@@ -160,7 +158,7 @@ class ResponseFriendshipAcepted(DTP.DataTransfer):
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.friendship = Models.user().fromJson(dictObj['friendship'])
+        self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
         return self
 
 class ResponseNamesLike(DTP.DataTransfer):
@@ -199,7 +197,6 @@ class ResponseDeleteMessage(DTP.DataTransfer):
     def __init__(self, message: Models.Message = Models.Message()):
         super().__init__()
         self.message = message
-        self.info = ''
 
     def toJson(self) -> dict:
         dictJson = super().toJson()
@@ -208,52 +205,46 @@ class ResponseDeleteMessage(DTP.DataTransfer):
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.info = dictObj['info']
+        self.message = Models.Message().fromJson(dictObj['message'])
         return self
 
 class ResponseBlockUser(DTP.DataTransfer):
-    def __init__(self, senderUser: Models.user = Models.user(), recipUser: Models.user = Models.user()):
+    def __init__(self, friendship:Models.Friendship = Models.Friendship()):
         """
         :param senderUser:  Models.user()
         :param recipUser:  Models.user()
         :rtype: ResponseBlockUser
         """
         super().__init__()
-        self.senderUser = senderUser
-        self.recipUser = recipUser
+        self.friendship = friendship
 
     def toJson(self) -> dict:
         dictJson = super().toJson()
-        dictJson['senderUser'] = self.senderUser.toJson()
-        dictJson['recipUser'] = self.recipUser.toJson()
+        dictJson['friendship'] = self.friendship.toJson()
         return dictJson
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.recipUser = Models.user().fromJson(dictObj['recipUser'])
-        self.senderUser = Models.user().fromJson(dictObj['senderUser'])
+        self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
         return self
 
 
 class ResponseUnblockUser(DTP.DataTransfer):
-    def __init__(self, senderUser: Models.user = Models.user(), recipUser: Models.user = Models.user()):
+    def __init__(self, friendship:Models.Friendship = Models.Friendship()):
         """
         :param senderUser:  Models.user()
         :param recipUser:  Models.user()
         :rtype: ResponseUnblockUser
         """
         super().__init__()
-        self.senderUser = senderUser
-        self.recipUser = recipUser
+        self.friendship = friendship
 
     def toJson(self) -> dict:
         dictJson = super().toJson()
-        dictJson['senderUser'] = self.senderUser.toJson()
-        dictJson['recipUser'] = self.recipUser.toJson()
+        dictJson['friendship'] = self.friendship.toJson()
         return dictJson
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.recipUser = Models.user().fromJson(dictObj['recipUser'])
-        self.senderUser = Models.user().fromJson(dictObj['senderUser'])
+        self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
         return self

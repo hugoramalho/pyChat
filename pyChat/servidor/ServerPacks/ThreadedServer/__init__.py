@@ -38,25 +38,35 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 print('Client has just made a connection! ', self.__class__.lst_client)
                 self.__send__(response)
 
-
             elif isinstance(response, Responses.ResponseSendMessage):
                 recipId = response.message.recipId
                 socketRecipUser = self.__class__.search_client(recipId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketRecipUser is not None:
+                    print('ResponseSendMessage : client online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketRecipUser, response)
                 self.__send__(response)
-
 
             elif isinstance(response, Responses.ResponseAddFriend):
                 recipId = response.friendship.recipUser.idd
                 socketRecipUser = self.__class__.search_client(recipId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketRecipUser is not None:
+                    print('ResponseAddFriend : client online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketRecipUser, response)
                 self.__send__(response)
+
+            elif isinstance(response, Responses.ResponseFriendshipAcepted):
+                senderId = response.friendship.senderUser.idd
+                socketSenderUser = self.__class__.search_client(senderId)
+                # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
+                if socketSenderUser is not None:
+                    print('ResponseFriendshipAcepted : client online')
+                    # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
+                    self.__sendTo__(socketSenderUser, response)
+
 
             else:
                 self.__send__(response)

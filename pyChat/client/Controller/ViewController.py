@@ -52,9 +52,9 @@ class MainViewController(Tk):
         self.activityFrames['ajuda_frame'] = frame
         frame.tkraise()
 
-    def friendshipRequestActv(self, friendship: Models.Friendship):
-        self.activityFrames['friendshipRequestActivity'] = friendshipRequestActivity.friendshipRequestActivity(self)
-        self.activityFrames['friendshipRequestActivity'].requestFriendship(friendship)
+    def friendshipRequestReceived(self, friendship: Models.Friendship):
+        self.activityFrames['friendshipRequestActivity'] = friendshipRequestActivity.friendshipRequestActivity(self, friendship)
+
 
     def addFriendActivity(self):
         frame = addFriendActivity.addFrame_ui(self)
@@ -104,8 +104,6 @@ class MainViewController(Tk):
     def requestAddFriend(self, friendEmail:str):
         self.session.requestAddFriend(friendEmail)
 
-    def requestFriendshipAcepted(self, friendship: Models.Friendship):
-        self.session.requestFriendshipAcepted(friendship)
 
     def showErrorMessage(self, exceptionTitle: str, exception: str):
         messagebox.showerror('Erro!', exception)

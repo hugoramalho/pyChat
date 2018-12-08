@@ -1,11 +1,4 @@
 from pyChat.Models import Models
-#from .UIElements import *
-# from .UIElements import *
-import tkinter
-
-from pyChat.Models import Models
-# from .UIElements import *
-# from .UIElements import *
 import tkinter
 from tkinter import ttk
 
@@ -20,12 +13,14 @@ class friendshipRequestActivity(tkinter.Toplevel):
         super().__init__()
         self.controller = controller
         self.friendship = friendship
-
+        self.senderUser = friendship.senderUser
 
         self.instru1 = ttk.Label(self,
-                                 text='O usuário TESTE de E-mail: TESTE deseja te adicionar à lista de contatos.')
-        #self.instru1 = ttk.Label(self, text = 'O usuário '+senderUser.userName+' de E-mail: '+senderUser.userEmail+' deseja te adicionar à lista de contatos.')
-        self.instru1.grid(row=0, column=0, columnspan = 3)
+                                 text='O usuário '+self.senderUser.userName+
+                                      '\n de E-mail: '+self.senderUser.userEmail+
+                                      '\ndeseja te adicionar à lista de contatos.')
+
+        self.instru1.grid(row=0, column=0, columnspan = 3,padx = 15, pady=20)
 
         self.acept = ttk.Button(self, text = 'Aceitar', command = lambda : self.accepted())
         self.acept.grid(row=1, column =0)
@@ -40,19 +35,18 @@ class friendshipRequestActivity(tkinter.Toplevel):
         self.acept.grid(row=1, column =3)
 
 
-    def requestFriendship(self, friendship: Models.Friendship):
-        self.friendship = friendship
-
     def accepted(self):
         self.friendship.accepted = 1
         self.controller.requestFriendshipAcepted(self.friendship)
+        self.destroy()
 
     def refused(self):
         self.friendship.accepted = 0
         self.controller.requestFriendshipRefused(self.friendship)
-
+        self.destroy()
 
     def blocked(self):
         self.friendship.accepted = 0
         self.friendship.blocked = 1
         self.controller.requestUserBlock(self.friendship)
+        self.destroy()

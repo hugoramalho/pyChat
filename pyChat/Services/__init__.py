@@ -19,6 +19,7 @@ class ClientRequestManager:
         try:
             # A REQUISIÇÃO É CARREGADA EM UM dict
             dictJson = json.loads(data.decode())
+            print('Handle cliente ' + str(dictJson))
             # E O dict É ENVIADO À CLASSE RESPONSÁVEL POR INSTANCIAR A REQUEST (BUILDER PATTERN)
             response = Responses.DataTransferEval(dictJson).eval()
             return response
@@ -55,7 +56,12 @@ class ClientRequestManager:
                 self.session.newUserOK(response.user)
 
             elif isinstance(response, Responses.ResponseAddFriend):
-                self.session.addFriend(response.recipUser)
+                self.session.ResponseAddFriend(response.friendship)
+
+            elif isinstance(response, Responses.ResponseFriendshipAcepted):
+                self.session.reportFriendshipAcepted(response.friendship)
+
+
 
             else:
                 self.session.reportException(Exception('Requisiçao não recuperada!'))
