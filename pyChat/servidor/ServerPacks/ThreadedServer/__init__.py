@@ -30,7 +30,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             if isinstance(response, DTP.InternalExceptions):
                 self.__send__(response)
 
-            if isinstance(response, Responses.ResponseLogin):
+            elif isinstance(response, Responses.ResponseLogin):
                 # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
                 dictClient = {'client_address': self.client_address, 'client_id': response.user.idd, 'client': self.request}
                 # Em seguida, dic_cliente é adicionado à lista de clientes
@@ -50,7 +50,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
 
             elif isinstance(response, Responses.ResponseAddFriend):
-                recipId = response.friendship.recipUser.idd
+                recipId = response.recipUser.idd
                 socketRecipUser = self.__class__.search_client(recipId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketRecipUser is not None:
@@ -74,6 +74,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
         try:
             print(obj)
             obj = obj.toJson()
+            print('agora toJson() '+str(obj))
             dado_str = json.dumps(obj)
             dado_bytes = bytes(dado_str, "utf-8")
             self.request.sendall(dado_bytes)

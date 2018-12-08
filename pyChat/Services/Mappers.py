@@ -24,7 +24,7 @@ class UserMapper(DataMapper):
             newUser = self.searchUser(user.userEmail)
             tableName = 'friends_' + str(newUser.idd)
             sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id_friend INTEGER UNIQUE, confirmation INTEGER, FOREIGN KEY(id_friend) REFERENCES users(id));'
-
+            feedback = self.__execute_commit__(sql)
             #tableName = 'notifications_' + str(newUser.idd)
             #sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id INTEGER PRIMARY KEY AUTOINCREMENT, id_type INTEGER, statusRead INTEGER, FOREIGN KEY(id_type) REFERENCES notifications(id));'
             #feedback = self.__execute_commit__(sql)
@@ -32,8 +32,6 @@ class UserMapper(DataMapper):
             #tableName = 'blocks_' + str(newUser.idd)
             #sql = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(id_block INTEGER UNIQUE, FOREIGN KEY(id_friend) REFERENCES users(id));'
             #feedback = self.__execute_commit__(sql)
-
-
             if feedback == 0:
                 return newUser
 
@@ -129,6 +127,9 @@ class UserMapper(DataMapper):
         else:
             return Exception('User not found')
 
+    def friendshipAcepted(self, friendship:Models.Friendship):
+        pass
+
     def addFriend(self, user:Models.user, friendEmail:str):
         if self.searchUser(friendEmail) != None:
             friend = self.searchUser(friendEmail)
@@ -142,7 +143,7 @@ class UserMapper(DataMapper):
 
                 #O contato é adcionado na tabela de amigos do usuário:
                 tableName = 'friends_'+str(userId)
-                sql = 'INSERT INTO ' + tableName + ' VALUES (' + str(id_friend) + ');'
+                sql = 'INSERT INTO ' + tableName + '(id_friend) VALUES (' + str(id_friend) + ');'
                 feedback = self.__execute_commit__(sql)
 
                 if isinstance(feedback, Exception):
@@ -150,7 +151,7 @@ class UserMapper(DataMapper):
 
                 # O usuário é adcionado na tabela de amigos do contato:
                 tableName = 'friends_'+str(id_friend)
-                sql = 'INSERT INTO ' + tableName + ' VALUES (' + str(userId) + ');'
+                sql = 'INSERT INTO ' + tableName + '(id_friend) VALUES (' + str(userId) + ');'
                 feedback = self.__execute_commit__(sql)
                 print('Era pra ser Except: -> ' + str(type(feedback)))
 

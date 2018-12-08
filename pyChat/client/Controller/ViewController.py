@@ -111,7 +111,7 @@ class MainViewController(Tk):
         messagebox.showwarning('Atenção!', warning)
 
     def showInfoMessage(self, infoTitle:str, info:str):
-        messagebox.showwarning('Atenção!', info)
+        messagebox.showinfo('Atenção!', info)
 
     def destroyChildrenFrames(self):
         if self.winfo_children():
