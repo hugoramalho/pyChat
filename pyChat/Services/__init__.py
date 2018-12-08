@@ -89,6 +89,7 @@ class ClientRequestManager:
 
     def requestBlockUser(self, friendship:Models.Friendship):
         request = Requests.RequestBlockUser(friendship)
+        self.sendRequest(request.toJson())
 
     def requestSendMessage(self, message: Models.Message):
         request = Requests.RequestSendMessage(message)

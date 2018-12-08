@@ -86,6 +86,12 @@ class MainViewController(Tk):
     def requestNewUser(self, user: Models.user):
         self.session.requestNewUser(user)
 
+
+
+    def requestBlockUser(self, friendship: Models.Friendship):
+        self.session.requestBlockUser(friendship)
+
+
     def requestRetrieveChat(self, userFriend: Models.user):
         self.session.requestRetrieveChat(userFriend)
 

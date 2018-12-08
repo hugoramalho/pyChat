@@ -86,8 +86,16 @@ class Session:
                                             '\nde E-mail: '+recipEmail+
                                             '\nrecebeu seu pedido de amizade!' )
 
+
+
     def reportException(self, exception: Exception):
         self.viewController.showInfoMessage('Oh Oh', str(exception))
+
+
+    def requestBlockUser(self, friendShip: Models.Friendship):
+        friendShip.senderUser = self.currentUser
+        self.clientHandler.requestBlockUser(friendShip)
+
 
     def requestLogin(self, login: Models.Login):
         self.clientHandler.requestLogin(login)
