@@ -8,6 +8,7 @@ class DataTransferEval:
 
     def eval(self) -> DTP.DataTransfer:
         objectData = eval(self.dictJson['requestName'])()
+        print(self.dictJson)
         objectData.fromJson(self.dictJson)
         return objectData
 

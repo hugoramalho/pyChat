@@ -123,7 +123,7 @@ class Message(AppModel):
 
     @property
     def senderUser(self):
-        return self._recipUser
+        return self._senderUser
 
     @senderUser.setter
     def senderUser(self, senderUser):
@@ -194,6 +194,9 @@ class user(AppModel):
         self._password = 123456
         self._idd = -1
         self._userEmail = 'user@null.com'
+        self._dateAdd = datetime.now()
+        self._registerDate = datetime.now()
+        self._showNotification = 1
 
     def toJson(self):
         dictJson = {}
@@ -219,6 +222,58 @@ class user(AppModel):
         yield 'userEmail', self._userEmail
         yield 'password', self._password
         yield 'idd', self._idd
+
+    @property
+    def showNotification(self):
+        return self._showNotification
+
+    @showNotification.setter
+    def showNotification(self, bol):
+        if type(bol) is int and bol == 1 or bol ==0:
+            self._showNotification = bol
+        else:
+            try:
+                bol = int(bol)
+                if type(bol) is int and bol == 1 or bol == 0:
+                    self._showNotification = bol
+                else:
+                    raise Exception('Erro ao atribuir showNotifications!')
+            except Exception as Expt:
+                raise Expt
+
+    @property
+    def registerDate(self):
+        return self._registerDate
+
+    @registerDate.setter
+    def registerDate(self, DateTime):
+        if type(DateTime) is str:
+            try:
+                self._registerDate = datetime.strptime(DateTime, '%Y-%m-%d %H:%M:%S.%f')
+            except Exception as Expt:
+                raise Expt
+        elif type(DateTime) is datetime:
+            self._registerDate = DateTime
+        else:
+            raise Exception('Erro ao atribuir a dataHora')
+
+    @property
+    def dateAdd(self):
+        return self._dateAdd
+
+    @dateAdd.setter
+    def dateAdd(self, DateTime):
+        if type(DateTime) is str:
+            try:
+                self._dateAdd = datetime.strptime(DateTime, '%Y-%m-%d %H:%M:%S.%f')
+            except Exception as Expt:
+                raise Expt
+        elif type(DateTime) is datetime:
+            self._dateAdd = DateTime
+        else:
+            self._dateAdd = datetime
+
+
 
     @property
     def idd(self):

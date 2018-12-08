@@ -57,17 +57,14 @@ class sqliteConn:
         except Exception as Expt:
             return self.__expt_msg__(Expt)
 
-    def __execute_transaction__(self, sql, tpl=''):
+    def __execute_transaction__(self, sql):
         self.__conect_BD__()  # Conexão aberta com o BD!
+        sql = 'BEGIN TRANSACTION; '+sql+' COMMIT;'
+        print(sql)
         try:
-            if tpl == '':
-                #EXECUTAR A TRANSAÇÃO SEM TUPLA
-                pass
-            else:
-                self.cursor.execute(sql, tpl)
-            lst = self.cursor.fetchall()
+            self.cursor.executescript(sql)
             self.__disconect_BD__()  # Conexão fechada com o BD!
-            return (lst)
+            return 0
         except Exception as Expt:
             return self.__expt_msg__(Expt)
 
@@ -102,6 +99,7 @@ class sqliteConn:
         self.__conect_BD__()  # Conexão aberta com o BD!
         try:
             if tpl == '':
+                print(sql)
                 self.cursor.execute(sql)
             else:
                 self.cursor.execute(sql, tpl)
