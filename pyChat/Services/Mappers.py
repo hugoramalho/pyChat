@@ -153,11 +153,11 @@ class UserMapper(DataMapper):
                 if id == None or id == 0:
                     registerDate = datetime.datetime.now()
                     # O contato é adcionado na tabela de amigos do usuário:
-                    tableName1 = 'friends_' + str(senderId)
-                    tableName2 = 'friends_' + str(recipId)
-                    sql1 = 'INSERT INTO ' + tableName1 + '(id_friend, confirmation, showNotification) VALUES (' + str(
-                        recipId) + ', 0, 1);'
-                    sql2 = 'INSERT INTO ' + tableName2 + '(id_friend, confirmation, showNotification) VALUES (' + str(
+                    tableSender = 'friends_' + str(senderId)
+                    tableRecip = 'friends_' + str(recipId)
+                    sql1 = 'INSERT INTO ' + tableSender + '(id_friend, confirmation, showNotification) VALUES (' + str(
+                        recipId) + ', 1, 1);'
+                    sql2 = 'INSERT INTO ' + tableRecip + '(id_friend, confirmation, showNotification) VALUES (' + str(
                         senderId) + ', 0, 1);'
 
                     if recipId > senderId:
@@ -283,7 +283,8 @@ class UserMapper(DataMapper):
 
         id_user = user.idd
         tableName = 'friends_' + str(id_user)
-        sql = 'SELECT id_friend,  userName, userEmail, showNotification, dateAdd FROM ' + tableName + ' INNER JOIN users ON (' + tableName + '.id_friend = users.id) WHERE confirmation = 0;'
+        sql = 'SELECT id_friend,  userName, userEmail, showNotification, dateAdd FROM ' + tableName + \
+              ' INNER JOIN users ON (' + tableName + '.id_friend = users.id) WHERE confirmation = 0;'
         lst_tupl = self.__execute_fetchall__(sql)
 
         if isinstance(lst_tupl, Exception):
