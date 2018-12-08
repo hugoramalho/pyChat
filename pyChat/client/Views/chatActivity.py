@@ -25,9 +25,14 @@ class chat_frame(chat_frame_ui):
         self.botao_envia.config(command=lambda: self.__envia_msg__())
         self.entr_msg.bind('<KeyRelease-Return>', lambda event: self.__envia_msg__())
         self.contatos_treeview.bind('<<TreeviewSelect>>', lambda event: self.__retrieve_chat__())
+
         self.add_contato_button.config(command=lambda: self.__add_contato__())
+        self.solicitations_button.config(command=lambda: self.FriendshipSolicitations())
 
         self.entr_contatos.bind('<KeyRelease>', lambda event: self.__search_contacts__())
+
+    def FriendshipSolicitations(self):
+        pass
 
     def __add_contato__(self):
         self.controller.addFriendActivity()

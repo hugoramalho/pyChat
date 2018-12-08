@@ -186,14 +186,17 @@ class chat_frame_ui(Frame):
         self.add_contato_button = ttk.Button(self.frame_contatos, text = 'Adicionar contato', state = 'enabled')
         self.add_contato_button.grid(row=0, column = 0, sticky = 'WE', padx=6 )
 
+        self.solicitations_button = ttk.Button(self.frame_contatos, text = 'Solicitações pendentes', state = 'enabled')
+        self.solicitations_button.grid(row=1, column = 0, sticky = 'WE', padx=6 )
+
         self.contatos_treeview = sub_Treeview(self.frame_contatos, num_cols = 1, height = 20, tit = 'Contatos')
         self.contatos_treeview.config_heading('0', text = 'Nomes:')
         self.contatos_treeview.config_column('#0', width = 150)
-        self.contatos_treeview.grid_frame(row = 1, column=0, sticky = N+S)
+        self.contatos_treeview.grid_frame(row = 2, column=0, sticky = N+S)
 
         
         self.entr_contatos = wd_Entry(self.frame_contatos, tit_Entry ='Buscar contato:')
-        self.entr_contatos.grid_frame(row=2, column = 0, sticky = W+E)
+        self.entr_contatos.grid_frame(row=3, column = 0, sticky = W+E)
         
 
         self.conversa_treeview = sub_Treeview(self.frame_chat, num_cols = 2, height = 20, tit = 'Selecione um contato para conversar.')
@@ -212,16 +215,14 @@ class chat_frame_ui(Frame):
         
         self.botao_envia = ttk.Button(self.frame_chat, text = 'enviar', state = 'disabled')
         self.botao_envia.grid(row=1, column = 1, sticky = S )
-        
-    def messagebox_info(self, tit, msg):
-        messagebox.showinfo(tit, msg)
-        
+
+
     def config_opcoes1(self, **kwargs):
         self.opcoes.entryconfigure(0, **kwargs)
-    
+
     def config_ajuda1(self, **kwargs):
         self.ajuda.entryconfigure(0, **kwargs)
-    
+
     def config_ajuda2(self, **kwargs):
         self.ajuda.entryconfigure(1, **kwargs)
 
