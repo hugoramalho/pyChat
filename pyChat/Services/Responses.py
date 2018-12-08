@@ -132,26 +132,36 @@ class ResponseNewUser(DTP.DataTransfer):
 
 
 class ResponseAddFriend(DTP.DataTransfer):
-    def __init__(self, senderUser: Models.user = Models.user(), recipUser: Models.user = Models.user()):
+    def __init__(self, friendship:Models.Friendship = Models.Friendship()):
         super().__init__()
-        self.senderUser = senderUser
-        self.recipUser = recipUser
-        self.statusAcept = 0
+        self.friendship = friendship
 
     def toJson(self) -> dict:
         dictJson = super().toJson()
-        dictJson['senderUser'] = self.senderUser.toJson()
-        dictJson['recipUser'] = self.recipUser.toJson()
-        dictJson['statusAcept'] = self.statusAcept
+        dictJson['friendship'] = self.friendship.toJson()
         return dictJson
 
     def fromJson(self, dictObj: dict):
         super().fromJson(dictObj)
-        self.recipUser = Models.user().fromJson(dictObj['recipUser'])
-        self.senderUser = Models.user().fromJson(dictObj['senderUser'])
-        self.statusAcept = dictObj['statusAcept']
+        self.friendship = Models.user().fromJson(dictObj['friendship'])
         return self
 
+
+class ResponseFriendshipAcepted(DTP.DataTransfer):
+    def __init__(self, friendship:Models.Friendship = Models.Friendship()):
+        super().__init__()
+        self.friendship = friendship
+
+
+    def toJson(self) -> dict:
+        dictJson = super().toJson()
+        dictJson['friendship'] = self.friendship.toJson()
+        return dictJson
+
+    def fromJson(self, dictObj: dict):
+        super().fromJson(dictObj)
+        self.friendship = Models.user().fromJson(dictObj['friendship'])
+        return self
 
 class ResponseNamesLike(DTP.DataTransfer):
     def __init__(self, namesLike :Models.LstUsers = Models.LstUsers()):

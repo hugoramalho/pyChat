@@ -1,4 +1,5 @@
 from datetime import datetime
+from . friendshipRequestActivity import friendshipRequestActivity
 
 from pyChat.Models import Models
 from pyChat.client.Views.UIElements.Frames import chat_frame_ui
@@ -32,7 +33,7 @@ class chat_frame(chat_frame_ui):
         self.entr_contatos.bind('<KeyRelease>', lambda event: self.__search_contacts__())
 
     def FriendshipSolicitations(self):
-        pass
+        f = friendshipRequestActivity(self, Models.Friendship())
 
     def __add_contato__(self):
         self.controller.addFriendActivity()

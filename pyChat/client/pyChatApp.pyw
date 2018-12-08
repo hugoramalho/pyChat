@@ -98,6 +98,9 @@ class Session:
         currentUser = self.currentUser
         self.clientHandler.requestAddFriend(currentUser, friendEmail)
 
+    def requestFriendshipAcepted(self, friendship:Models.Friendship):
+        self.clientHandler.requestFriendshipAcepted(friendship)
+
 
 class myWhats_app:
     """

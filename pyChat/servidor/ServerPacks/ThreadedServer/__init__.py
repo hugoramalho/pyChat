@@ -50,7 +50,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
 
             elif isinstance(response, Responses.ResponseAddFriend):
-                recipId = response.recipUser.idd
+                recipId = response.friendship.recipUser.idd
                 socketRecipUser = self.__class__.search_client(recipId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketRecipUser is not None:

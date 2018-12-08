@@ -81,6 +81,9 @@ class ClientRequestManager:
         request = Requests.RequestFriendshipAcepted(friendship)
         self.sendRequest(request.toJson())
 
+    def requestBlockUser(self, friendship:Models.Friendship):
+        request = Requests.RequestBlockUser(friendship)
+
     def requestSendMessage(self, message: Models.Message):
         request = Requests.RequestSendMessage(message)
         self.sendRequest(request.toJson())
@@ -92,6 +95,7 @@ class ClientRequestManager:
     def requestAddFriend(self, currentUser: Models.user, friendEmail:str):
         request = Requests.RequestAddFriend(currentUser, friendEmail)
         self.sendRequest(request.toJson())
+
 
     def exceptionHandler(self, Expt = Exception) -> Exception or None:
         self.session.reportException(Expt)

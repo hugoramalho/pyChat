@@ -104,6 +104,9 @@ class MainViewController(Tk):
     def requestAddFriend(self, friendEmail:str):
         self.session.requestAddFriend(friendEmail)
 
+    def requestFriendshipAcepted(self, friendship: Models.Friendship):
+        self.session.requestFriendshipAcepted(friendship)
+
     def showErrorMessage(self, exceptionTitle: str, exception: str):
         messagebox.showerror('Erro!', exception)
 

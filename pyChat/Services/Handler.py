@@ -74,8 +74,17 @@ def MyRequestHandler(dictRequest: dict):
 
     elif isinstance(request, Requests.RequestAddFriend):
         feedback = Mappers.UserMapper().addFriend(request.user, request.friendEmail)
-        if isinstance(feedback, Models.user):
+        if isinstance(feedback, Models.Friendship):
             response = Responses.ResponseAddFriend(feedback)
+            return response
+        elif isinstance(feedback, Exception):
+            response = DTP.InternalExceptions(Requests.RequestAddFriend(), feedback)
+            return response
+
+    elif isinstance(request, Requests.RequestFriendshipAcepted):
+        feedback = Mappers.UserMapper().friendshipAcepted(request.friendship)
+        if isinstance(feedback, Models.Friendship):
+            response = Responses.ResponseFriendshipAcepted(feedback)
             return response
         elif isinstance(feedback, Exception):
             response = DTP.InternalExceptions(Requests.RequestAddFriend(), feedback)
