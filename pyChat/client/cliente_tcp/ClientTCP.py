@@ -27,3 +27,6 @@ class cliente_tcp:
             self.client_t.transport.write(data.encode('utf-8'))
         except Exception as Expt:
             return Expt
+
+    def finishConection(self):
+        self.client_t.connection_lost()

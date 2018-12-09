@@ -14,6 +14,11 @@ class MainViewController(Tk):
 
         self.session = session
         self.activityFrames = {}
+        self.protocol("WM_DELETE_WINDOW", self.on_exit)
+
+    def on_exit(self):
+        self.session.finishSession()
+        self.destroy()
 
     @property
     def currentUser(self):

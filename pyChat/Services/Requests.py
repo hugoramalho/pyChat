@@ -131,6 +131,20 @@ class RequestAddFriend(DTP.DataTransfer):
         self.user = Models.user().fromJson(dictObj['user'])
         return self
 
+class RequestFinishConection(DTP.DataTransfer):
+    def __init__(self, currentUser: Models.user):
+        super().__init__()
+        self.user = currentUser
+
+    def toJson(self) -> dict:
+        dictJson = super().toJson()
+        dictJson['user'] = self.user.toJson()
+        return dictJson
+
+    def fromJson(self, dictObj: dict)-> object:
+        super().fromJson(dictObj)
+        self.user = Models.user().fromJson(dictObj['user'])
+        return self
 
 class RequestFriendshipAcepted(DTP.DataTransfer):
     def __init__(self, friendship: Models.Friendship = Models.Friendship()):

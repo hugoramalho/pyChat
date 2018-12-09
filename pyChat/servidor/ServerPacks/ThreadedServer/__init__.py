@@ -30,6 +30,9 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             if isinstance(response, DTP.InternalExceptions):
                 self.__send__(response)
 
+            elif isinstance(response, Requests.RequestFinishConection):
+                self.finish_client(response.user)
+
             elif isinstance(response, Responses.ResponseLogin):
                 # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
                 dictClient = {'client_address': self.client_address, 'client_id': response.user.idd, 'client': self.request}
@@ -99,9 +102,6 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
         except Exception as Expt:
             print(Expt)
 
-    def finish(self):
-        self.__class__.finish_client(client_address = self.client_address)
-        self.con_status = False
 
     @classmethod
     def lst_clients(cls):
@@ -114,12 +114,13 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 return elem_client['client']
 
     @classmethod
-    def finish_client(cls, **kwargs):
-        #client_id = kwargs['client_id']
-        client_address = kwargs['client_address']
+    def finish_client(cls, user:Models.user):
         for elem_client in cls.lst_client:
-            if elem_client['client_address'] == client_address:
-                del(elem_client)
+            if elem_client['client_id'] == user.idd:
+                elem_client['client_address'].close()
+                del elem_client
+
+
 
 
 

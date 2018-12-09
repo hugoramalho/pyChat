@@ -19,10 +19,10 @@ class ClientProtocol(asyncio.Protocol):
     @asyncio.coroutine
     def _connect(self):
         try:
-            loop = asyncio.get_event_loop()  # Pulls the new event loop because that is who launched this coroutine
-            loop.set_debug(True)
-            coro = loop.create_connection(lambda: self, '127.0.0.1', 3333)
-            _, proto = loop.run_until_complete(coro)
+            self.loop = asyncio.get_event_loop()  # Pulls the new event loop because that is who launched this coroutine
+            self.loop.set_debug(True)
+            coro = self.loop.create_connection(lambda: self, '127.0.0.1', 3333)
+            _, proto = self.loop.run_until_complete(coro)
         except RuntimeError:
             pass
         except OSError as Expt:

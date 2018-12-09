@@ -28,6 +28,9 @@ class Session:
         self.viewController.loginActivity()
         self.viewController.mainloop()
 
+    def finishSession(self):
+        self.clientHandler.finishConection()
+
     def login(self, user: Models.user):
         self.currentUser = user
         self.viewController.chatActivity()

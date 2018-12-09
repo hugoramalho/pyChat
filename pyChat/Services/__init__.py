@@ -15,6 +15,9 @@ class ClientRequestManager:
         self.con = ClientTCP.cliente_tcp(self)
         self.con.conecta()
 
+    def finishConection(self):
+        self.con
+
     def solveResponse(self, data:bytes) -> Exception or DTP.InternalExceptions or DTP.DataTransfer:
         try:
             # A REQUISIÇÃO É CARREGADA EM UM dict

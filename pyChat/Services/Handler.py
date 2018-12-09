@@ -98,3 +98,6 @@ def MyRequestHandler(dictRequest: dict):
         elif isinstance(feedback, Exception):
             response = DTP.InternalExceptions(Requests.ResponseFriendshipRequests(), feedback)
             return response
+
+    elif isinstance(request, Requests.RequestFinishConection):
+        return request
