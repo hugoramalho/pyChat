@@ -109,6 +109,12 @@ class chat_frame(chat_frame_ui):
 
     @property
     def __msg__(self):
+        message = {'dateTime': datetime.now(), 'recipUser': self.currentContactChat,
+                   'content': self.entr_msg.retorna_entr()}
+        return message
+
+    @property
+    def __msg__(self):
         message = Models.Message()
         message.dateTime = datetime.now()
         message.recipUser = self.currentContactChat

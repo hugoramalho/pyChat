@@ -24,6 +24,9 @@ class MainViewController(Tk):
     def currentUser(self):
         return self.session.currentUser
 
+
+
+
     def loginActivity(self):
         self.destroyChildrenFrames()
         frame = loginActivity.loginActivity(self, self)
@@ -63,7 +66,6 @@ class MainViewController(Tk):
     def friendshipRequestReceived(self, friendship: Models.Friendship):
         self.activityFrames['friendshipRequestActivity'] = friendshipRequestActivity.friendshipRequestActivity(self, friendship)
 
-
     def addFriendActivity(self):
         frame = addFriendActivity.addFrame_ui(self)
         # frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
@@ -72,6 +74,8 @@ class MainViewController(Tk):
 
     def login(self, user: Models.user):
         self.chatActivity()
+
+
 
     def setContatos(self, lstFriendsUser: Models.LstUsers):
         self.activityFrames['chat_frame'].setContatos(lstFriendsUser)
@@ -91,6 +95,9 @@ class MainViewController(Tk):
     def fillFriendshipRequests(self, lstUsers:Models.LstUsers):
         self.activityFrames['friendshipRequestsActivity'].fillFriendshipRequests(lstUsers)
 
+
+
+
     def requestLogin(self, login: Models.Login):
         self.session.requestLogin(login)
 
@@ -102,7 +109,6 @@ class MainViewController(Tk):
 
     def requestBlockUser(self, friendship: Models.Friendship):
         self.session.requestBlockUser(friendship)
-
 
     def requestRetrieveChat(self, userFriend: Models.user):
         self.session.requestRetrieveChat(userFriend)
@@ -123,6 +129,8 @@ class MainViewController(Tk):
         self.session.requestAddFriend(friendEmail)
 
 
+
+
     def showErrorMessage(self, exceptionTitle: str, exception: str):
         messagebox.showerror('Erro!', exception)
 
@@ -141,3 +149,27 @@ class MainViewController(Tk):
                 elemFrame.destroy()
         else:
             return None
+
+
+class ChatPresenter:
+    def __init__(self, mainController = MainViewController):
+        self.mainController = mainController
+
+    def sendMessage(self, dicMsg:dict):
+        pass
+
+    def receiveMessage(self, msg:Models.Message):
+        pass
+
+    def retrieveFriends(self):
+        pass
+
+    def addFriend(self):
+        pass
+
+    def friendshipRequests(self):
+        pass
+
+    def retrieveChat(self, idFriend: int):
+        pass
+

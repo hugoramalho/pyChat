@@ -8,7 +8,9 @@ class Session:
         self.clientHandler = ClientHandler.ClientRequestManager(self)
         self.currentUser = Models.user()
         self.viewController = ViewController.MainViewController(self)
+
         self.viewController.loginActivity()
+
         self.viewController.mainloop()
 
     def finishSession(self):
