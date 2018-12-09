@@ -28,8 +28,9 @@ class friendshipRequestsActivity(friendshipRequestsLayout):
 
     def aceptUser(self):
         self.controller.requestFriendshipAcepted(self.currentContact)
-        self.controller.requestRetrieveFriends()
         self.controller.retrieveFriendshipRequests()
+        self.controller.requestRetrieveFriends()
+        self.destroy()
 
 
     def bindTreeview(self):

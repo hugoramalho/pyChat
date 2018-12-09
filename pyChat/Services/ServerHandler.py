@@ -87,7 +87,7 @@ def MyRequestHandler(dictRequest: dict):
             response = Responses.ResponseFriendshipAcepted(feedback)
             return response
         elif isinstance(feedback, Exception):
-            response = DTP.InternalExceptions(Requests.RequestAddFriend(), feedback)
+            response = DTP.InternalExceptions(Requests.RequestFriendshipAcepted(), feedback)
             return response
 
     elif isinstance(request, Requests.RequestFriendshipRequests):
@@ -96,7 +96,7 @@ def MyRequestHandler(dictRequest: dict):
             response = Responses.ResponseFriendshipRequests(feedback)
             return response
         elif isinstance(feedback, Exception):
-            response = DTP.InternalExceptions(Requests.ResponseFriendshipRequests(), feedback)
+            response = DTP.InternalExceptions(Requests.RequestFriendshipRequests(), feedback)
             return response
 
     elif isinstance(request, Requests.RequestFinishConection):

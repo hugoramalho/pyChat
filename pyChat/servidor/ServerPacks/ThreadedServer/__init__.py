@@ -25,8 +25,6 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             print(self.dado)
             response = MyRequestHandler(self.dado)
 
-
-
             if isinstance(response, DTP.InternalExceptions):
                 self.__send__(response)
 
@@ -35,7 +33,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
             elif isinstance(response, Responses.ResponseLogin):
                 # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
-                dictClient = {'client_address': self.client_address, 'client_id': response.user.idd, 'ClientSide': self.request}
+                dictClient = {'client_address': self.client_address, 'client_id': response.user.idd, 'ClientSocket': self.request}
                 # Em seguida, dic_cliente é adicionado à lista de clientes
                 self.__class__.lst_client.append(dictClient)
                 print('ClientSide has just made a connection! ', self.__class__.lst_client)
@@ -69,6 +67,8 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                     print('ResponseFriendshipAcepted : ClientSide online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketSenderUser, response)
+                self.__send__(response)
+
             else:
                 self.__send__(response)
 
@@ -79,7 +79,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             dado_bytes = bytes(dado_str, "utf-8")
             socketRequest.sendall(dado_bytes)
         except Exception as Expt:
-            pass
+            print(Expt)
 
     def __send__(self, obj: DTP.DataTransfer or DTP.InternalExceptions):
         try:
@@ -111,13 +111,13 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     def search_client(cls, id_client):
         for elem_client in cls.lst_client:
             if elem_client['client_id'] == id_client:
-                return elem_client['ClientSide']
+                return elem_client['ClientSocket']
 
     @classmethod
     def finish_client(cls, user:Models.user):
         for elem_client in cls.lst_client:
             if elem_client['client_id'] == user.idd:
-                elem_client['client_address'].close()
+                elem_client['ClientSocket'].close()
                 del elem_client
 
 

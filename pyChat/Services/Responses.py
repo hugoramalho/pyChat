@@ -150,7 +150,6 @@ class ResponseFriendshipAcepted(DTP.DataTransfer):
         super().__init__()
         self.friendship = friendship
 
-
     def toJson(self) -> dict:
         dictJson = super().toJson()
         dictJson['friendship'] = self.friendship.toJson()

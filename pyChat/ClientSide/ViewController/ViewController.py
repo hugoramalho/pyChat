@@ -25,8 +25,6 @@ class MainViewController(Tk):
         return self.session.currentUser
 
 
-
-
     def loginActivity(self):
         self.destroyChildrenFrames()
         frame = loginActivity.loginActivity(self, self)
@@ -116,8 +114,8 @@ class MainViewController(Tk):
     def requestRetrieveFriends(self):
         self.session.requestRetrieveFriends()
 
-    def requestFriendshipAcepted(self, friendship: Models.Friendship):
-        self.session.requestFriendshipAcepted(friendship)
+    def requestFriendshipAcepted(self, user: Models.LstUsers):
+        self.session.requestFriendshipAcepted(user)
 
     def requestSendMessage(self, message: Models.Message):
         self.session.requestSendMessage(message)
@@ -154,22 +152,37 @@ class MainViewController(Tk):
 class ChatPresenter:
     def __init__(self, mainController = MainViewController):
         self.mainController = mainController
+        self.session = self.mainController.session
 
-    def sendMessage(self, dicMsg:dict):
-        pass
+    def sendMessage(self, message: Models.Message):
+        self.session.requestSendMessage(message)
 
-    def receiveMessage(self, msg:Models.Message):
-        pass
+    def namesLike(self, namesLike):
+        self.session.requestNamesLike(namesLike)
+
+    def retrieveChat(self, userFriend: Models.user):
+        self.session.requestRetrieveChat(userFriend)
+
 
     def retrieveFriends(self):
-        pass
+        self.session.requestRetrieveFriends()
 
-    def addFriend(self):
-        pass
 
     def friendshipRequests(self):
         pass
 
-    def retrieveChat(self, idFriend: int):
-        pass
 
+    def setContatos(self, lstFriendsUser: Models.LstUsers):
+        self.mainController.activityFrames['chat_frame'].setContatos(lstFriendsUser)
+
+    def receiveMessage(self, message: Models.Message):
+        self.mainController.activityFrames['chat_frame'].append_msg(message)
+
+    def setChat(self, lstMessages: Models.LstMessages):
+        self.mainController.activityFrames['chat_frame'].carrega_msg(lstMessages)
+
+    def setNamesLike(self, lstUsers: Models.LstUsers):
+        self.mainController.activityFrames['chat_frame'].fill_search_contacts_like(lstUsers)
+
+    def addFriend(self, friend: Models.user):
+        self.mainController.activityFrames['chat_frame'].addFriendList(friend)

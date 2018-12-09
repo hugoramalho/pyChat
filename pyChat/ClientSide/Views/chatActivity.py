@@ -105,7 +105,10 @@ class chat_frame(chat_frame_ui):
             self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
 
     def append_msg(self, message: Models.Message):
-        self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
+        if self.currentContactChat.idd == message.senderUser.idd:
+            self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
+        else:
+            pass
 
     @property
     def __msg__(self):

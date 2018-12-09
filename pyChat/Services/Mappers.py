@@ -1,6 +1,6 @@
 import datetime
 from pyChat.Models import Models
-from pyChat.ServerSide.ServerPacks import SqliteServer
+from pyChat.servidor.ServerPacks import SqliteServer
 
 
 class DataMapper(SqliteServer.sqliteConn):

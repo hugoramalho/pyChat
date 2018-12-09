@@ -7,10 +7,13 @@ class DataTransferEval:
         self.dictJson = dictJson
 
     def eval(self) -> DTP.DataTransfer:
-        objectData = eval(self.dictJson['requestName'])()
-        print(self.dictJson)
-        objectData.fromJson(self.dictJson)
-        return objectData
+        try:
+            objectData = eval(self.dictJson['requestName'])()
+            print(self.dictJson)
+            objectData.fromJson(self.dictJson)
+            return objectData
+        except Exception as Expt:
+            return Expt
 
 class RequestLogin(DTP.DataTransfer):
     def __init__(self, login: Models.Login = Models.Login()):
