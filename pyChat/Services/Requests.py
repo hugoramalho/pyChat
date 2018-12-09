@@ -147,6 +147,20 @@ class RequestFriendshipAcepted(DTP.DataTransfer):
         self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
         return self
 
+class RequestFriendshipRequests(DTP.DataTransfer):
+    def __init__(self, currentUser: Models.user = Models.user()):
+        super().__init__()
+        self.user = currentUser
+
+    def toJson(self):
+        dictJson = super().toJson()
+        dictJson['user'] = self.user.toJson()
+        return dictJson
+
+    def fromJson(self, dictObj: dict or list):
+        super().fromJson(dictObj)
+        self.user = Models.user().fromJson(dictObj['user'])
+        return self
 
 class RequestNamesLike(DTP.DataTransfer):
     def __init__(self, currentUser: Models.user = Models.user(), nameLike:str = ''):

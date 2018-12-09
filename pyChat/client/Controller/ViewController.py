@@ -2,7 +2,7 @@ from tkinter import Tk, messagebox
 
 from pyChat.Models import Models
 from pyChat.client.Views import chatActivity, addFriendActivity, helpActivity, loginActivity, newUserActivity, \
-    friendshipRequestActivity
+    friendshipRequestActivity, friendshipRequestsActivity
 from pyChat.client.pyChatApp import Session
 
 
@@ -32,6 +32,9 @@ class MainViewController(Tk):
         frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
         self.activityFrames['novo_user_frame'] = frame
         frame.tkraise()
+
+    def friendshipRequestsActivity(self):
+        self.activityFrames['friendshipRequestsActivity'] = friendshipRequestsActivity.friendshipRequestsActivity(self)
 
     def chatActivity(self):
         self.destroyChildrenFrames()
@@ -80,13 +83,17 @@ class MainViewController(Tk):
     def addFriend(self, friend: Models.user):
         self.activityFrames['chat_frame'].addFriendList(friend)
 
+    def fillFriendshipRequests(self, lstUsers:Models.LstUsers):
+        self.activityFrames['friendshipRequestsActivity'].fillFriendshipRequests(lstUsers)
+
     def requestLogin(self, login: Models.Login):
         self.session.requestLogin(login)
 
     def requestNewUser(self, user: Models.user):
         self.session.requestNewUser(user)
 
-
+    def retrieveFriendshipRequests(self):
+        self.session.retrieveFriendshipRequests()
 
     def requestBlockUser(self, friendship: Models.Friendship):
         self.session.requestBlockUser(friendship)
@@ -99,7 +106,7 @@ class MainViewController(Tk):
         self.session.requestRetrieveFriends()
 
     def requestFriendshipAcepted(self, friendship: Models.Friendship):
-            self.session.requestFriendshipAcepted(friendship)
+        self.session.requestFriendshipAcepted(friendship)
 
     def requestSendMessage(self, message: Models.Message):
         self.session.requestSendMessage(message)

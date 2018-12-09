@@ -126,8 +126,8 @@ class UserMapper(DataMapper):
         tableSender = 'friends_' + str(senderUserId)
         tableRecip = 'friends_' + str(recipUserId)
 
-        sql1 = 'UPDATE '+tableSender+' SET CONFIRMATION = 1 WHERE id_friend = '+recipUserId+';'
-        sql2 = 'UPDATE ' + tableRecip + ' SET CONFIRMATION = 1 WHERE id_friend = '+senderUserId+';'
+        sql1 = 'UPDATE '+tableSender+' SET CONFIRMATION = 1 WHERE id_friend = '+str(recipUserId)+';'
+        sql2 = 'UPDATE ' + tableRecip + ' SET CONFIRMATION = 1 WHERE id_friend = '+str(senderUserId)+';'
 
         commitFeedback = self.__execute_transaction__(sql1+sql2)
         if commitFeedback == 0:
@@ -277,10 +277,6 @@ class UserMapper(DataMapper):
             return commitFeedback
 
     def friendshipRequests(self, user:Models.user):
-        tableNotifications = 'notifications_' + str(user.idd)
-        tableBlocks = 'blocks_' + str(user.idd)
-        tableNotShowNotfications = 'notShowNotfications_'+str(user.idd)
-
         id_user = user.idd
         tableName = 'friends_' + str(id_user)
         sql = 'SELECT id_friend,  userName, userEmail, showNotification, dateAdd FROM ' + tableName + \

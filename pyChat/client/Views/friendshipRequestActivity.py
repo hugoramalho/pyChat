@@ -10,7 +10,8 @@ from pyChat.Models import Models
 #class friendshipRequestActivity(friendshipRequestLayot):
 class friendshipRequestActivity(tkinter.Toplevel):
     def __init__(self, controller, friendship:Models.Friendship):
-        super().__init__()
+        super().__init__(padx = 20, pady=20)
+        self.resizable(False, False)
         self.controller = controller
         self.friendship = friendship
         self.senderUser = friendship.senderUser

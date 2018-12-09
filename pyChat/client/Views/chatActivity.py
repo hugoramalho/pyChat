@@ -33,7 +33,8 @@ class chat_frame(chat_frame_ui):
         self.entr_contatos.bind('<KeyRelease>', lambda event: self.__search_contacts__())
 
     def FriendshipSolicitations(self):
-        f = friendshipRequestActivity(self, Models.Friendship())
+        self.controller.friendshipRequestsActivity()
+
 
     def __add_contato__(self):
         self.controller.addFriendActivity()

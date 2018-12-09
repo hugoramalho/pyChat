@@ -192,6 +192,20 @@ class ResponseDeleteChat(DTP.DataTransfer):
         self.friendship = Models.Friendship().fromJson(dictObj['friendship'])
         return self
 
+class ResponseFriendshipRequests(DTP.DataTransfer):
+    def __init__(self, lstUsers: Models.LstUsers = Models.LstUsers()):
+        super().__init__()
+        self.lstUsers = lstUsers
+
+    def toJson(self):
+        dictJson = super().toJson()
+        dictJson['lstUsers'] = self.lstUsers.toJson()
+        return dictJson
+
+    def fromJson(self, dictObj: dict):
+        super().fromJson(dictObj)
+        self.lstUsers = Models.LstUsers().fromJson(dictObj['lstUsers'])
+        return self
 
 class ResponseDeleteMessage(DTP.DataTransfer):
     def __init__(self, message: Models.Message = Models.Message()):

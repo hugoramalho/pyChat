@@ -63,6 +63,8 @@ class Session:
             self.viewController.addFriend(friend)
             self.viewController.showInfoMessage('Contato adicionado!', 'Contato '+friend.userName+
                                                 ' adicionado com sucesso!\nE-mail: '+friend.userEmail)
+    def fillFriendshipRequests(self, lstUsers:Models.LstUsers):
+        self.viewController.fillFriendshipRequests(lstUsers)
 
     def ResponseAddFriend(self, friendship:Models.Friendship):
         recipId = friendship.recipUser.idd
@@ -86,16 +88,15 @@ class Session:
                                             '\nde E-mail: '+recipEmail+
                                             '\nrecebeu seu pedido de amizade!' )
 
-
-
     def reportException(self, exception: Exception):
         self.viewController.showInfoMessage('Oh Oh', str(exception))
-
 
     def requestBlockUser(self, friendShip: Models.Friendship):
         friendShip.senderUser = self.currentUser
         self.clientHandler.requestBlockUser(friendShip)
 
+    def retrieveFriendshipRequests(self):
+        self.clientHandler.retrieveFriendshipRequests(self.currentUser)
 
     def requestLogin(self, login: Models.Login):
         self.clientHandler.requestLogin(login)
@@ -111,12 +112,15 @@ class Session:
         currentUser = self.currentUser
         self.clientHandler.requestRetrieveFriends(currentUser)
 
-    def requestFriendshipAcepted(self, friendship: Models.Friendship):
+    def requestFriendshipAcepted(self, user: Models.user):
         # VERIFICAÇÃO FEITA:
-        if friendship.recipUser.idd == self.currentUser.idd and friendship.accepted == 1 and friendship.blocked == 0:
-            self.clientHandler.requestFriendshipAcepted(friendship)
-        else:
-            self.viewController.showErrorMessage('Oh Oh!', 'Erro ao processar a requisição:\n'+str(friendship))
+        friendship = Models.Friendship()
+        friendship.recipUser = user
+        friendship.accepted = 1
+        friendship.blocked = 0
+        friendship.senderUser = self.currentUser
+        self.clientHandler.requestFriendshipAcepted(friendship)
+
 
     def requestSendMessage(self, message: Models.Message):
         message.senderUser = self.currentUser

@@ -61,11 +61,15 @@ class ClientRequestManager:
             elif isinstance(response, Responses.ResponseFriendshipAcepted):
                 self.session.reportFriendshipAcepted(response.friendship)
 
-
+            elif isinstance(response, Responses.ResponseFriendshipRequests):
+                self.session.fillFriendshipRequests(response.lstUsers)
 
             else:
                 self.session.reportException(Exception('Requisiçao não recuperada!'))
 
+    def retrieveFriendshipRequests(self, user:Models.user):
+        request = Requests.RequestFriendshipRequests(user)
+        self.sendRequest(request.toJson())
 
     def requestLogin(self, login: Models.Login):
         request = Requests.RequestLogin(login)

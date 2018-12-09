@@ -89,3 +89,12 @@ def MyRequestHandler(dictRequest: dict):
         elif isinstance(feedback, Exception):
             response = DTP.InternalExceptions(Requests.RequestAddFriend(), feedback)
             return response
+
+    elif isinstance(request, Requests.RequestFriendshipRequests):
+        feedback = Mappers.UserMapper().friendshipRequests(request.user)
+        if isinstance(feedback, Models.LstUsers):
+            response = Responses.ResponseFriendshipRequests(feedback)
+            return response
+        elif isinstance(feedback, Exception):
+            response = DTP.InternalExceptions(Requests.ResponseFriendshipRequests(), feedback)
+            return response

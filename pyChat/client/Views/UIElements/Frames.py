@@ -236,10 +236,10 @@ class friendshipRequestsLayout(Toplevel):
 
 
         self.aceptButton = ttk.Button(self.frame_contatos, text='Aceitar contato', state='disabled')
-        self.aceptButton.grid(row=0, column=0, sticky='WE', padx=6)
+        self.aceptButton.grid(row=1, column=1, sticky='WE', padx=6)
 
         self.blockButton = ttk.Button(self.frame_contatos, text='Bloquear contato', state='disabled')
-        self.blockButton.grid(row=0, column=0, sticky='WE', padx=6)
+        self.blockButton.grid(row=1, column=2, sticky='WE', padx=6)
 
         self.contatos_treeview = sub_Treeview(self.frame_contatos, num_cols=1, height=20, tit='Pedidos de amizade')
         self.contatos_treeview.config_heading('0', text='Nomes:')
