@@ -2,7 +2,7 @@ from datetime import datetime
 from . friendshipRequestActivity import friendshipRequestActivity
 
 from pyChat.Models import Models
-from pyChat.client.Views.UIElements.Frames import chat_frame_ui
+from pyChat.ClientSide.Views.UIElements.Frames import chat_frame_ui
 
 
 class chat_frame(chat_frame_ui):

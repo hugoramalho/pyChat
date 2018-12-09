@@ -1,5 +1,5 @@
 import json
-from pyChat.client.cliente_tcp.async_tcp import client
+from pyChat.ClientSide.ClientTCP.async_tcp import client
 
 
 class cliente_tcp:

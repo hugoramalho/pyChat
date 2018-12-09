@@ -2,7 +2,7 @@ import json
 import socketserver
 import threading
 
-from pyChat.Services.Handler import *
+from pyChat.Services.ServerHandler import *
 
 
 class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
@@ -11,7 +11,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         """
         OBS: SE EU TROCAR PARA socket, LEMBRAR QUE O ATRIBUTO .request É O SOCKET CLIENTE
-        segundo a documentação: 'self.request is the TCP socket connected to the client'
+        segundo a documentação: 'self.request is the TCP socket connected to the ClientSide'
         """
         # Abaixo é instanciada uma conexão com o banco de dados:
         self.con_status = True
@@ -35,10 +35,10 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
             elif isinstance(response, Responses.ResponseLogin):
                 # dic_cliente guarda a tupla (endereco, porta) e a id do usuário:
-                dictClient = {'client_address': self.client_address, 'client_id': response.user.idd, 'client': self.request}
+                dictClient = {'client_address': self.client_address, 'client_id': response.user.idd, 'ClientSide': self.request}
                 # Em seguida, dic_cliente é adicionado à lista de clientes
                 self.__class__.lst_client.append(dictClient)
-                print('Client has just made a connection! ', self.__class__.lst_client)
+                print('ClientSide has just made a connection! ', self.__class__.lst_client)
                 self.__send__(response)
 
             elif isinstance(response, Responses.ResponseSendMessage):
@@ -46,7 +46,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 socketRecipUser = self.__class__.search_client(recipId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketRecipUser is not None:
-                    print('ResponseSendMessage : client online')
+                    print('ResponseSendMessage : ClientSide online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketRecipUser, response)
                 self.__send__(response)
@@ -56,7 +56,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 socketRecipUser = self.__class__.search_client(recipId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketRecipUser is not None:
-                    print('ResponseAddFriend : client online')
+                    print('ResponseAddFriend : ClientSide online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketRecipUser, response)
                 self.__send__(response)
@@ -66,7 +66,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 socketSenderUser = self.__class__.search_client(senderId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketSenderUser is not None:
-                    print('ResponseFriendshipAcepted : client online')
+                    print('ResponseFriendshipAcepted : ClientSide online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketSenderUser, response)
             else:
@@ -111,7 +111,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     def search_client(cls, id_client):
         for elem_client in cls.lst_client:
             if elem_client['client_id'] == id_client:
-                return elem_client['client']
+                return elem_client['ClientSide']
 
     @classmethod
     def finish_client(cls, user:Models.user):

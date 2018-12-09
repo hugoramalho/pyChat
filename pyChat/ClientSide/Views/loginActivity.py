@@ -1,5 +1,5 @@
 from pyChat.Models import Models
-from pyChat.client.Views.UIElements.Frames import login_ui
+from pyChat.ClientSide.Views.UIElements.Frames import login_ui
 
 
 class loginActivity(login_ui):

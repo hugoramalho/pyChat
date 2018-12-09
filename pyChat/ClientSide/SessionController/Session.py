@@ -1,28 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-#  myWhats_app.py
-#
-#  Ramalho <Ramalho@DESKTOP-MEI8G7T>
-#
-
-from pyChat import Services
 from pyChat.Models import Models
-from pyChat.client.Controller import ViewController
-
-__author__ = "Ramalho, Hugo"
-__copyright__ = "Copyright 2017, Trabalho de Redes -  myWhats_app.py"
-__credits__ = ["Instituto Federal do Espirito Santo, Campus SERRA", "Professor Gilmar Vassoler"]
-__license__ = "GPL"
-__version__ = "0.9"
-__maintainer__ = "Hugo Ramalho"
-__email__ = "ramalho.hg@gmail.com"
-__status__ = "Testing"
+from pyChat.Services import ClientHandler
+from pyChat.ClientSide.ViewController import ViewController
 
 
 class Session:
     def __init__(self):
-        self.clientHandler = Services.ClientRequestManager(self)
+        self.clientHandler = ClientHandler.ClientRequestManager(self)
         self.currentUser = Models.user()
         self.viewController = ViewController.MainViewController(self)
         self.viewController.loginActivity()
@@ -132,7 +115,6 @@ class Session:
         friendship.senderUser = self.currentUser
         self.clientHandler.requestFriendshipAcepted(friendship)
 
-
     def requestSendMessage(self, message: Models.Message):
         message.senderUser = self.currentUser
         self.clientHandler.requestSendMessage(message)
@@ -144,26 +126,3 @@ class Session:
     def requestAddFriend(self, friendEmail:str):
         currentUser = self.currentUser
         self.clientHandler.requestAddFriend(currentUser, friendEmail)
-
-
-
-
-
-class myWhats_app:
-    """
-        SUPER CLASSE DO PROGRAMA.
-        Unidade funcional do programa encapsulada numa classe.
-    """
-    def __init__(self):
-        self.sessao_atv = Session()
-
-def main():
-    app = myWhats_app()
-
-if __name__ == '__main__':
-    import sys
-    sys.exit(main())
-
-
-
-

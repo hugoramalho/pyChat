@@ -1,6 +1,6 @@
-from pyChat.client.Views.UIElements.Frames import friendshipRequestsLayout
+from pyChat.ClientSide.Views.UIElements.Frames import friendshipRequestsLayout
 from pyChat.Models import Models
-#from pyChat.client.Controller.ViewController import MainViewController
+#from pyChat.ClientSide.ViewController.ViewController import MainViewController
 
 class friendshipRequestsActivity(friendshipRequestsLayout):
     def __init__(self, controller):

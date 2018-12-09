@@ -1,4 +1,4 @@
-from pyChat.servidor.ServerPacks.ThreadedServer import *
+from pyChat.ServerSide.ServerPacks.ThreadedServer import *
 import sys
 
 

@@ -1,5 +1,5 @@
 from pyChat.Models import Models
-from pyChat.client.Views.UIElements.Frames import novo_user_ui
+from pyChat.ClientSide.Views.UIElements.Frames import novo_user_ui
 
 
 class novo_user_frame(novo_user_ui):

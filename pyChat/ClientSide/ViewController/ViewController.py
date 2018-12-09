@@ -1,9 +1,9 @@
 from tkinter import Tk, messagebox
 
 from pyChat.Models import Models
-from pyChat.client.Views import chatActivity, addFriendActivity, helpActivity, loginActivity, newUserActivity, \
+from pyChat.ClientSide.Views import chatActivity, addFriendActivity, helpActivity, loginActivity, newUserActivity, \
     friendshipRequestActivity, friendshipRequestsActivity
-from pyChat.client.pyChatApp import Session
+from pyChat.ClientSide.pyChatApp import Session
 
 
 class MainViewController(Tk):
