@@ -135,7 +135,6 @@ class UserMapper(DataMapper):
         elif isinstance(commitFeedback, Exception):
             return commitFeedback
 
-
     def addFriend(self, senderUser:Models.user, friendEmail:str) -> Models.Friendship or Exception:
         if self.searchUser(friendEmail) != None:
             recipUser = self.searchUser(friendEmail)
@@ -179,7 +178,6 @@ class UserMapper(DataMapper):
                     return Exception('Usuário não encontrado!')
         else:
             return Exception('Usuário não encontrado!')
-
 
     def retrieveFriends(self, user:Models.user):
         id_user = user.idd

@@ -18,12 +18,14 @@ class addFrame_ui(Frames.AddFriendFrame):
         self.friendEmail = self.entr_email.get()
         if self.friendEmail != '':
             self.controller.requestAddFriend(self.friendEmail)
+            self.controller.requestRetrieveFriends()
         else:
             pass
 
     def addFriendOk(self, user: Models.user):
         self.entr_email.delete(0, 'end')
         messagebox.showinfo('Novo contato','Usuário adicionado com sucesso!\nNome: ' + user.userName + '\nEmail: ' + user.userEmail)
+        self.controller.requestRetrieveFriends()
         self.update()
         self.deiconify()
 

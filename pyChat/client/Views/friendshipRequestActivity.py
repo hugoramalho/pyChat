@@ -39,15 +39,18 @@ class friendshipRequestActivity(tkinter.Toplevel):
     def accepted(self):
         self.friendship.accepted = 1
         self.controller.requestFriendshipAcepted(self.friendship)
+        self.controller.requestRetrieveFriends()
         self.destroy()
 
     def refused(self):
         self.friendship.accepted = 0
         self.controller.requestFriendshipRefused(self.friendship)
+        self.controller.requestRetrieveFriends()
         self.destroy()
 
     def blocked(self):
         self.friendship.accepted = 0
         self.friendship.blocked = 1
         self.controller.requestUserBlock(self.friendship)
+        self.controller.requestRetrieveFriends()
         self.destroy()

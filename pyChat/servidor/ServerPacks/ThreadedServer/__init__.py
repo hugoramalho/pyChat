@@ -66,8 +66,6 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                     print('ResponseFriendshipAcepted : client online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketSenderUser, response)
-
-
             else:
                 self.__send__(response)
 
@@ -78,7 +76,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             dado_bytes = bytes(dado_str, "utf-8")
             socketRequest.sendall(dado_bytes)
         except Exception as Expt:
-            print(Expt)
+            pass
 
     def __send__(self, obj: DTP.DataTransfer or DTP.InternalExceptions):
         try:

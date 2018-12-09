@@ -77,9 +77,17 @@ class Session:
     def reportFriendshipAcepted(self, friendship:Models.Friendship):
         recipName = friendship.recipUser.userName
         recipEmail = friendship.recipUser.userEmail
-        self.viewController.showInfoMessage('Pedido aceito!','O usuário '+recipName+
-                                            '\nde E-mail: '+recipEmail+
-                                            '\nAceitou seu pedido de amizade!' )
+        if friendship.senderUser.idd != self.currentUser.idd:
+
+            self.viewController.showInfoMessage('Pedido aceito!','O usuário '+recipName+
+                                                '\nde E-mail: '+recipEmail+
+                                                '\nAceitou seu pedido de amizade!' )
+        else:
+            self.viewController.showInfoMessage('Usuário aceito!','O usuário '+recipName+
+                                                '\nde E-mail: '+recipEmail+
+                                                '\nFaz parte da sua lista de contatos!' )
+
+
 
     def reportFriendshipSent(self, friendship:Models.Friendship):
         recipName = friendship.recipUser.userName
