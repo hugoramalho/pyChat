@@ -31,6 +31,7 @@ class friendshipRequestsActivity(friendshipRequestsLayout):
         self.controller.requestRetrieveFriends()
         self.controller.retrieveFriendshipRequests()
 
+
     def bindTreeview(self):
         # Caso haja seleção de contato na lista, a id do contato selecionado é capturada:
         self.idUserSelected = self.contatos_treeview.idd_selection_treeView()
