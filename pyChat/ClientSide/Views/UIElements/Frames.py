@@ -179,7 +179,7 @@ class chat_frame_ui(Frame):
         self.separator = ttk.Separator(self, orient = HORIZONTAL)
         self.separator.grid(row = 0, column=1, sticky = 'we', pady = 2, padx = 2)
         
-        self.frame_chat = Frame(self)
+        self.frame_chat = LabelFrame(self, relief = FLAT)
         self.frame_chat.grid(row = 0, column=2, sticky = N+W+E+S, padx = 3, pady = 3)
         
 

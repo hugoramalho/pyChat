@@ -7,7 +7,7 @@ class friendshipRequestsActivity(friendshipRequestsLayout):
         super().__init__()
         self.controller = controller
         self.lstRequests = Models.LstUsers()
-        self.controller.retrieveFriendshipRequests()
+        self.controller.requestFriendshipRequests()
 
         self.blockButton.config(command = lambda :self.blockUser())
         self.aceptButton.config(command=lambda: self.aceptUser())
@@ -24,12 +24,12 @@ class friendshipRequestsActivity(friendshipRequestsLayout):
         friendship.accepted = 0
         friendship.blocked = 1
         self.controller.requestBlockUser(friendship)
-        self.controller.retrieveFriendshipRequests()
+        #self.controller.requestFriendshipRequests()
 
     def aceptUser(self):
         self.controller.requestFriendshipAcepted(self.currentContact)
-        self.controller.retrieveFriendshipRequests()
-        self.controller.requestRetrieveFriends()
+        #self.controller.requestFriendshipRequests()
+        #self.controller.requestRetrieveFriends()
         self.destroy()
 
 

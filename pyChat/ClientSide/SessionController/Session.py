@@ -67,6 +67,8 @@ class Session:
         recipEmail = friendship.recipUser.userEmail
         senderName = friendship.senderUser.userName
         senderEmail = friendship.senderUser.userEmail
+        self.requestRetrieveFriends()
+        #self.requestFriendshipRequests()
         if friendship.recipUser.idd == self.currentUser.idd:
             self.viewController.showInfoMessage('Usuário aceito!','O usuário '+senderName+
                                                 '\nde E-mail: '+senderEmail+
@@ -91,7 +93,7 @@ class Session:
         friendShip.senderUser = self.currentUser
         self.clientHandler.requestBlockUser(friendShip)
 
-    def retrieveFriendshipRequests(self):
+    def requestFriendshipRequests(self):
         self.clientHandler.retrieveFriendshipRequests(self.currentUser)
 
     def requestLogin(self, login: Models.Login):

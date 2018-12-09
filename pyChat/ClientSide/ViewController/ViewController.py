@@ -102,8 +102,8 @@ class MainViewController(Tk):
     def requestNewUser(self, user: Models.user):
         self.session.requestNewUser(user)
 
-    def retrieveFriendshipRequests(self):
-        self.session.retrieveFriendshipRequests()
+    def requestFriendshipRequests(self):
+        self.session.requestFriendshipRequests()
 
     def requestBlockUser(self, friendship: Models.Friendship):
         self.session.requestBlockUser(friendship)

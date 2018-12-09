@@ -1,5 +1,4 @@
 from datetime import datetime
-from . friendshipRequestActivity import friendshipRequestActivity
 
 from pyChat.Models import Models
 from pyChat.ClientSide.Views.UIElements.Frames import chat_frame_ui
@@ -19,13 +18,16 @@ class chat_frame(chat_frame_ui):
         self.idUserSelected = self.currentContactChat.idd
         self.userFriendsList = Models.LstUsers()
 
-
         self.config_opcoes1(command=lambda: self.controller.loginActivity())
         self.config_ajuda1(command=lambda: self.__raise_ajuda__())
         self.config_ajuda2(command=lambda: self.__raise_sobre__())
         self.botao_envia.config(command=lambda: self.__envia_msg__())
         self.entr_msg.bind('<KeyRelease-Return>', lambda event: self.__envia_msg__())
         self.contatos_treeview.bind('<<TreeviewSelect>>', lambda event: self.__retrieve_chat__())
+
+        #TODO MUDAR ESSA CHAMADA ABAIXO
+        self.frame_chat.config(text = 'Seja bem vindo(a) '+ self.controller.session.currentUser.userName)
+
 
         self.add_contato_button.config(command=lambda: self.__add_contato__())
         self.solicitations_button.config(command=lambda: self.FriendshipSolicitations())
@@ -34,7 +36,6 @@ class chat_frame(chat_frame_ui):
 
     def FriendshipSolicitations(self):
         self.controller.friendshipRequestsActivity()
-
 
     def __add_contato__(self):
         self.controller.addFriendActivity()
@@ -66,20 +67,14 @@ class chat_frame(chat_frame_ui):
         # Caso haja seleção de contato na lista, a id do contato selecionado é capturada:
         self.idUserSelected = self.contatos_treeview.idd_selection_treeView()
         self.currentContactChat = self.userFriendsList.searchId(self.idUserSelected)
-
+        # A lista de conversas daquele contato é carregada:
         self.controller.requestRetrieveChat(self.currentContactChat)
-
         self.conversa_treeview.config_tit_treeView('Conversa com: ' + self.currentContactChat.userName)
-
         # O botão de enviar mensagens é habilitado:
         self.botao_envia.config(state='enabled')
         # A entrada de texto é habilitada e limpada:
         self.entr_msg.config(state='normal')
         self.entr_msg.limpa_entr()
-
-        # A lista de conversas daquele contato é carregada:
-
-
 
     def fill_search_contacts_like(self, lstUsersLike: Models.LstUsers):
         if (lstUsersLike != []):
