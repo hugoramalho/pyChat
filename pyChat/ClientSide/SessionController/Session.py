@@ -20,45 +20,47 @@ class Session:
         self.currentUser = user
         self.viewController.chatActivity()
 
-    def setContatos(self, lstFriendsUser: Models.LstUsers):
-        self.viewController.setContatos(lstFriendsUser)
+    def retrievedContacts(self, lstFriendsUser: Models.LstUsers):
+        self.viewController.retrievedContacts(lstFriendsUser)
 
-    def receiveMessage(self, message: Models.Message):
+    def incomingMessage(self, message: Models.Message):
         if message.senderId == self.currentUser.idd:
+            #TODO IMPLEMENTAR O CHECK DE MENSAGEM RECEBIDA
             pass
         else:
             self.viewController.receiveMessage(message)
 
-    def freindshipRequest(self, friendship: Models.Friendship):
+    def friendshipRequest(self, friendship: Models.Friendship):
         if friendship.recipUser.idd == self.currentUser.idd:
             self.viewController.friendshipRequestActv(friendship)
         else:
             self.viewController.friendshipRequestFeedbackActv(friendship)
 
-    def retrieveChat(self, lstMessages: Models.LstMessages):
-        self.viewController.retrieveChat(lstMessages)
+    def retrievedChat(self, lstMessages: Models.LstMessages):
+        self.viewController.retrievedChat(lstMessages)
 
-    def namesLike(self, lstUsers: Models.LstUsers):
-        self.viewController.namesLike(lstUsers)
+    def retrievedNamesLike(self, lstUsers: Models.LstUsers):
+        self.viewController.retrievedNamesLike(lstUsers)
 
-    def newUserOK(self, user: Models.user):
+    def reportNewUserOK(self, user: Models.user):
         self.viewController.showInfoMessage('Usuário adicionado!', 'Usuário cadastrado com sucesso!')
 
-    def addFriend(self, friend: Models.user):
+    def incomingFriend(self, friend: Models.user):
         if friend.idd == self.currentUser.idd:
-            self.viewController.addFriend(friend)
+            self.viewController.incomingFriend(friend)
         else:
-            self.viewController.addFriend(friend)
+            self.viewController.incomingFriend(friend)
             self.viewController.showInfoMessage('Contato adicionado!', 'Contato '+friend.userName+
                                                 ' adicionado com sucesso!\nE-mail: '+friend.userEmail)
-    def fillFriendshipRequests(self, lstUsers:Models.LstUsers):
-        self.viewController.fillFriendshipRequests(lstUsers)
+
+    def retrievedFriendshipRequests(self, lstUsers:Models.LstUsers):
+        self.viewController.retrievedFriendshipRequests(lstUsers)
 
     def ResponseAddFriend(self, friendship:Models.Friendship):
         recipId = friendship.recipUser.idd
         senderId = friendship.senderUser.idd
         if self.currentUser.idd == recipId:
-            self.viewController.friendshipRequestReceived(friendship)
+            self.viewController.friendshipRequestReceivedActivity(friendship)
         elif self.currentUser.idd == senderId:
             self.reportFriendshipSent(friendship)
 
@@ -68,7 +70,7 @@ class Session:
         senderName = friendship.senderUser.userName
         senderEmail = friendship.senderUser.userEmail
         self.requestRetrieveFriends()
-        #self.requestFriendshipRequests()
+        self.requestFriendshipRequests()
         if friendship.recipUser.idd == self.currentUser.idd:
             self.viewController.showInfoMessage('Usuário aceito!','O usuário '+senderName+
                                                 '\nde E-mail: '+senderEmail+
@@ -77,7 +79,6 @@ class Session:
             self.viewController.showInfoMessage('Pedido aceito!','O usuário '+recipName+
                                                 '\nde E-mail: '+recipEmail+
                                                 '\nAceitou seu pedido de amizade!' )
-
 
     def reportFriendshipSent(self, friendship:Models.Friendship):
         recipName = friendship.recipUser.userName

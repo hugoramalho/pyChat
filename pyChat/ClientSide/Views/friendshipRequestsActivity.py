@@ -13,7 +13,7 @@ class friendshipRequestsActivity(friendshipRequestsLayout):
         self.aceptButton.config(command=lambda: self.aceptUser())
         self.contatos_treeview.bind('<<TreeviewSelect>>', lambda event: self.bindTreeview())
 
-    def fillFriendshipRequests(self, lstRequests: Models.LstUsers):
+    def retrievedFriendshipRequests(self, lstRequests: Models.LstUsers):
         self.lstRequests = lstRequests
         self.contatos_treeview.insert_lst_treeView(self.lstRequests.toTreeview())
         self.controller.requestRetrieveFriends()

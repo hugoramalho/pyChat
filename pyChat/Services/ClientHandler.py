@@ -44,19 +44,19 @@ class ClientRequestManager:
                 self.session.login(response.user)
 
             elif isinstance(response, Responses.ResponseRetrieveFriends):
-                self.session.setContatos(response.lstUsers)
+                self.session.retrievedContacts(response.lstUsers)
 
             elif isinstance(response, Responses.ResponseSendMessage):
-                self.session.receiveMessage(response.message)
+                self.session.incomingMessage(response.message)
 
             elif isinstance(response, Responses.ResponseRetrieveChat):
-                self.session.retrieveChat(response.lstMessages)
+                self.session.retrievedChat(response.lstMessages)
 
             elif isinstance(response, Responses.ResponseNamesLike):
-                self.session.namesLike(response.namesLike)
+                self.session.retrievedNamesLike(response.namesLike)
 
             elif isinstance(response, Responses.ResponseNewUser):
-                self.session.newUserOK(response.user)
+                self.session.reportNewUserOK(response.user)
 
             elif isinstance(response, Responses.ResponseAddFriend):
                 self.session.ResponseAddFriend(response.friendship)
@@ -65,7 +65,7 @@ class ClientRequestManager:
                 self.session.reportFriendshipAcepted(response.friendship)
 
             elif isinstance(response, Responses.ResponseFriendshipRequests):
-                self.session.fillFriendshipRequests(response.lstUsers)
+                self.session.retrievedFriendshipRequests(response.lstUsers)
 
             else:
                 self.session.reportException(Exception('Requisiçao não recuperada!'))

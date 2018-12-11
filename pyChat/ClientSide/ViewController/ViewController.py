@@ -24,7 +24,8 @@ class MainViewController(Tk):
     def currentUser(self):
         return self.session.currentUser
 
-
+    #############################################
+    # ABAIXO MÉTODOS DE ALTERNANCIA DE ACTIVITIES
     def loginActivity(self):
         self.destroyChildrenFrames()
         frame = loginActivity.loginActivity(self, self)
@@ -38,6 +39,9 @@ class MainViewController(Tk):
         frame.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
         self.activityFrames['novo_user_frame'] = frame
         frame.tkraise()
+
+    def friendshipRequestReceivedActivity(self, friendship: Models.Friendship):
+        self.activityFrames['friendshipRequestActivity'] = friendshipRequestActivity.friendshipRequestActivity(self, friendship)
 
     def friendshipRequestsActivity(self):
         self.activityFrames['friendshipRequestsActivity'] = friendshipRequestsActivity.friendshipRequestsActivity(self)
@@ -61,8 +65,7 @@ class MainViewController(Tk):
         self.activityFrames['ajuda_frame'] = frame
         frame.tkraise()
 
-    def friendshipRequestReceived(self, friendship: Models.Friendship):
-        self.activityFrames['friendshipRequestActivity'] = friendshipRequestActivity.friendshipRequestActivity(self, friendship)
+
 
     def addFriendActivity(self):
         frame = addFriendActivity.addFrame_ui(self)
@@ -73,29 +76,27 @@ class MainViewController(Tk):
     def login(self, user: Models.user):
         self.chatActivity()
 
+    #############################
+    # ABAIXO MÉTODOS DE retrieved
+    def retrievedContacts(self, lstFriendsUser: Models.LstUsers):
+        self.activityFrames['chat_frame'].retrievedContacts(lstFriendsUser)
 
+    def incomingMessage(self, message: Models.Message):
+        self.activityFrames['chat_frame'].incomingMessage(message)
 
-    def setContatos(self, lstFriendsUser: Models.LstUsers):
-        self.activityFrames['chat_frame'].setContatos(lstFriendsUser)
+    def retrievedChat(self, lstMessages: Models.LstMessages):
+        self.activityFrames['chat_frame'].retrievedChat(lstMessages)
 
-    def receiveMessage(self, message: Models.Message):
-        self.activityFrames['chat_frame'].append_msg(message)
+    def retrievedNamesLike(self, lstUsers: Models.LstUsers):
+        self.activityFrames['chat_frame'].retrievedNamesLike(lstUsers)
 
-    def retrieveChat(self, lstMessages: Models.LstMessages):
-        self.activityFrames['chat_frame'].carrega_msg(lstMessages)
+    def incomingFriend(self, friend: Models.user):
+        self.activityFrames['chat_frame'].incomingFriend(friend)
 
-    def namesLike(self, lstUsers: Models.LstUsers):
-        self.activityFrames['chat_frame'].fill_search_contacts_like(lstUsers)
-
-    def addFriend(self, friend: Models.user):
-        self.activityFrames['chat_frame'].addFriendList(friend)
-
-    def fillFriendshipRequests(self, lstUsers:Models.LstUsers):
-        self.activityFrames['friendshipRequestsActivity'].fillFriendshipRequests(lstUsers)
-
-
-
-
+    def retrievedFriendshipRequests(self, lstUsers:Models.LstUsers):
+        self.activityFrames['friendshipRequestsActivity'].retrievedFriendshipRequests(lstUsers)
+    ############################
+    # ABAIXO MÉTODOS DE REQUEST:
     def requestLogin(self, login: Models.Login):
         self.session.requestLogin(login)
 
@@ -125,7 +126,6 @@ class MainViewController(Tk):
 
     def requestAddFriend(self, friendEmail:str):
         self.session.requestAddFriend(friendEmail)
-
 
 
 
@@ -173,10 +173,10 @@ class ChatPresenter:
 
 
     def setContatos(self, lstFriendsUser: Models.LstUsers):
-        self.mainController.activityFrames['chat_frame'].setContatos(lstFriendsUser)
+        self.mainController.activityFrames['chat_frame'].retrievedContacts(lstFriendsUser)
 
     def receiveMessage(self, message: Models.Message):
-        self.mainController.activityFrames['chat_frame'].append_msg(message)
+        self.mainController.activityFrames['chat_frame'].incomingMessage(message)
 
     def setChat(self, lstMessages: Models.LstMessages):
         self.mainController.activityFrames['chat_frame'].carrega_msg(lstMessages)
@@ -185,4 +185,5 @@ class ChatPresenter:
         self.mainController.activityFrames['chat_frame'].fill_search_contacts_like(lstUsers)
 
     def addFriend(self, friend: Models.user):
-        self.mainController.activityFrames['chat_frame'].addFriendList(friend)
+        self.mainController.activityFrames['chat_frame'].incomingFriend(friend)
+

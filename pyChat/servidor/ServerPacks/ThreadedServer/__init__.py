@@ -121,9 +121,6 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 del elem_client
 
 
-
-
-
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     # logging.info({'module': 'server', 'msg': 'Listening'})
     # Ctrl-C will cleanly kill all spawned threads

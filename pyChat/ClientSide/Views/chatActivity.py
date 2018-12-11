@@ -40,7 +40,7 @@ class chat_frame(chat_frame_ui):
     def __add_contato__(self):
         self.controller.addFriendActivity()
 
-    def setContatos(self, lstUser: Models.LstUsers):
+    def retrievedContacts(self, lstUser: Models.LstUsers):
         print(lstUser)
         self.userFriendsList = lstUser
         self.contatos_treeview.clear_treeView()
@@ -55,12 +55,12 @@ class chat_frame(chat_frame_ui):
     def __raise_sobre__(self):
         self.controller.aboutActivity()
 
-    def carrega_msg(self, lstMessage: Models.LstMessages):
+    def retrievedChat(self, lstMessage: Models.LstMessages):
         self.lst_conversa_atv = lstMessage
         self.conversa_treeview.clear_treeView()
         self.conversa_treeview.insert_lst_treeView(self.lst_conversa_atv.toTreeview())
 
-    def addFriendList(self, friend: Models.user):
+    def incomingFriend(self, friend: Models.user):
         self.controller.requestRetrieveFriends()
 
     def __retrieve_chat__(self):
@@ -76,7 +76,7 @@ class chat_frame(chat_frame_ui):
         self.entr_msg.config(state='normal')
         self.entr_msg.limpa_entr()
 
-    def fill_search_contacts_like(self, lstUsersLike: Models.LstUsers):
+    def retrievedNamesLike(self, lstUsersLike: Models.LstUsers):
         if (lstUsersLike != []):
             self.userFriendsList = lstUsersLike
             self.contatos_treeview.clear_treeView()
@@ -99,7 +99,7 @@ class chat_frame(chat_frame_ui):
             self.controller.requestSendMessage(message)
             self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
 
-    def append_msg(self, message: Models.Message):
+    def incomingMessage(self, message: Models.Message):
         if self.currentContactChat.idd == message.senderUser.idd:
             self.conversa_treeview.insert_kwargs_treeView(**message.toTreeview())
         else:
