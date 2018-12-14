@@ -54,7 +54,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 socketRecipUser = self.__class__.search_client(recipId)
                 # SE O CLIENTE DESTINATÁRIO ESTIVER ONLINE:
                 if socketRecipUser is not None:
-                    print('ResponseAddFriend : ClientSide online')
+                    print('reportAddFriend : ClientSide online')
                     # A MENSAGEM É IMEDIATAMENTE ENCAMINHADA À SUA SESSÃO:
                     self.__sendTo__(socketRecipUser, response)
                 self.__send__(response)

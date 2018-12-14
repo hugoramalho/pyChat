@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 
+
 class helpActivity(Toplevel):
     def __init__(self):
         super().__init__()

@@ -59,7 +59,7 @@ class ClientRequestManager:
                 self.session.reportNewUserOK(response.user)
 
             elif isinstance(response, Responses.ResponseAddFriend):
-                self.session.ResponseAddFriend(response.friendship)
+                self.session.reportAddFriend(response.friendship)
 
             elif isinstance(response, Responses.ResponseFriendshipAcepted):
                 self.session.reportFriendshipAcepted(response.friendship)

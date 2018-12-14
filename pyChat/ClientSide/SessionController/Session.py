@@ -10,7 +10,6 @@ class Session:
         self.viewController = ViewController.MainViewController(self)
 
         self.viewController.loginActivity()
-
         self.viewController.mainloop()
 
     def finishSession(self):
@@ -28,9 +27,9 @@ class Session:
             #TODO IMPLEMENTAR O CHECK DE MENSAGEM RECEBIDA
             pass
         else:
-            self.viewController.receiveMessage(message)
+            self.viewController.incomingMessage(message)
 
-    def friendshipRequest(self, friendship: Models.Friendship):
+    def incomingFriendshipRequest(self, friendship: Models.Friendship):
         if friendship.recipUser.idd == self.currentUser.idd:
             self.viewController.friendshipRequestActv(friendship)
         else:
@@ -56,7 +55,7 @@ class Session:
     def retrievedFriendshipRequests(self, lstUsers:Models.LstUsers):
         self.viewController.retrievedFriendshipRequests(lstUsers)
 
-    def ResponseAddFriend(self, friendship:Models.Friendship):
+    def reportAddFriend(self, friendship:Models.Friendship):
         recipId = friendship.recipUser.idd
         senderId = friendship.senderUser.idd
         if self.currentUser.idd == recipId:
@@ -69,13 +68,14 @@ class Session:
         recipEmail = friendship.recipUser.userEmail
         senderName = friendship.senderUser.userName
         senderEmail = friendship.senderUser.userEmail
-        self.requestRetrieveFriends()
-        self.requestFriendshipRequests()
         if friendship.recipUser.idd == self.currentUser.idd:
+            self.requestFriendshipRequests()
             self.viewController.showInfoMessage('Usuário aceito!','O usuário '+senderName+
                                                 '\nde E-mail: '+senderEmail+
                                                 '\nFaz parte da sua lista de contatos!' )
+            self.requestRetrieveFriends()
         else:
+            self.requestFriendshipRequests()
             self.viewController.showInfoMessage('Pedido aceito!','O usuário '+recipName+
                                                 '\nde E-mail: '+recipEmail+
                                                 '\nAceitou seu pedido de amizade!' )

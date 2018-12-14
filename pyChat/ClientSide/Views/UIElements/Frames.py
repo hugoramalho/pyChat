@@ -1,21 +1,13 @@
-
 from .Widgets import *
 
 
 __all__ = ['sub_CBox', 'sub_Menu', 'wd_Entry', 'sub_Text', 'sub_Treeview', 'login_ui', 'novo_user_ui', 'novo_user_ui', 'chat_frame_ui', 'c_janelaPrincipal']
 
 
-
-
-
-
-
-
 class login_ui(Frame):
     def __init__(self, framePai, **kwargs):
         super().__init__(framePai)
         self.grid(sticky=E+W)
-
 
         #Subtítulos do programa:
         #O subTitulo1 é declarado e "fixado"(.grid) dentro do frameLocal com o nome do programa:
@@ -33,7 +25,6 @@ class login_ui(Frame):
         self.entr2 = wd_Entry(self, show ='*')
         self.entr2.grid_frame(row = 4,column = 0, sticky = E+W)
         
-        
         #O botao1 é declarado no sub-bloco abaixo, dentro do frameLocal:
         self.botao1 = ttk.Button(self)
         self.botao1.grid(row = 6, column = 0, sticky = W+E, padx = 2, pady=3)
@@ -41,15 +32,10 @@ class login_ui(Frame):
         #O  botao2 é declarado no sub-bloco abaixo, dentro do frameLocal:
         self.botao2 = ttk.Button(self)
         self.botao2.grid(row = 7, column = 0, sticky = W+E, padx = 2, pady=3)
-        
 
         #O  botao3 é declarado no sub-bloco abaixo, dentro do frameLocal:
         self.botao3 = ttk.Button(self)
         self.botao3.grid(row = 8, column = 0, sticky = W+E, padx = 2, pady=3)
-
-    
-    def messagebox_info(self, tit, msg):
-        messagebox.showinfo(tit, msg)
     
     def config_tit1(self, **kwargs):
         self.tit1.config(**kwargs)
@@ -106,8 +92,6 @@ class novo_user_ui(Frame):
         self.entr3 = wd_Entry(self, show ="*")
         self.entr3.grid_frame(row = 6,column = 0, sticky = E+W)
         
-        
-        
         #O botao1 é declarado no sub-bloco abaixo, dentro do frameLocal:
         self.botao1 = ttk.Button(self)
         self.botao1.grid(row = 7, column = 0, sticky = W+E, padx = 2, pady=3)
@@ -115,10 +99,6 @@ class novo_user_ui(Frame):
         #O  botao2 é declarado no sub-bloco abaixo, dentro do frameLocal:
         self.botao2 = ttk.Button(self)
         self.botao2.grid(row = 8, column = 0, sticky = W+E, padx = 2, pady=3)
-        
-        
-    def messagebox_info(self, tit, msg):
-        messagebox.showinfo(tit, msg)
 
     def config_tit1(self, **kwargs):
         self.tit1.config(**kwargs)
@@ -128,9 +108,6 @@ class novo_user_ui(Frame):
 
     def config_B2(self, **kwargs):
         self.botao2.config(**kwargs)
-    
-    def config_B3(self, **kwargs):
-        self.botao3.config(**kwargs)
  
     def grid_frame(self):
         self.grid(row = 0, column=0, sticky = N+S, pady = 2, padx = 2)
@@ -157,8 +134,7 @@ class chat_frame_ui(Frame):
         self.opcoes.add_command(label="Trocar usuário")
         #Comando abaixo adciona um layout de separação entre as opções do menu:
         self.opcoes.add_separator()  #Esse comando adciona um layout de separação entre as opções do menu
-        
-        
+
         #Abaixo a declaração e as Sub-opções dentro da opção "Ajuda":
         self.ajuda = Menu(self.menu_superior, tearoff=0)
         self.menu_superior.add_cascade(menu=self.ajuda,label='Ajuda')
@@ -194,20 +170,16 @@ class chat_frame_ui(Frame):
         self.contatos_treeview.config_column('#0', width = 150)
         self.contatos_treeview.grid_frame(row = 2, column=0, sticky = N+S)
 
-        
         self.entr_contatos = wd_Entry(self.frame_contatos, tit_Entry ='Buscar contato:')
         self.entr_contatos.grid_frame(row=3, column = 0, sticky = W+E)
-        
 
         self.conversa_treeview = sub_Treeview(self.frame_chat, num_cols = 2, height = 20, tit = 'Selecione um contato para conversar.')
         self.conversa_treeview.config_column('#0', width = 200)
         self.conversa_treeview.config_heading("#0", text = 'Enviado por:')
         self.conversa_treeview.config_column('1', width = 500)
         self.conversa_treeview.config_heading('1', text = 'Mensagem:')
-        
 
-        self.conversa_treeview.grid_frame(row = 0, column=0, sticky = N+S, columnspan = 2)  
-
+        self.conversa_treeview.grid_frame(row = 0, column=0, sticky = N+S, columnspan = 2)
         
         self.entr_msg = wd_Entry(self.frame_chat, tit_Entry ='Digite a mensagem:', width = 80, state_Entry ='disabled')
         self.entr_msg.insert_Entry('Selecione um contato para conversar!')
@@ -215,7 +187,6 @@ class chat_frame_ui(Frame):
         
         self.botao_envia = ttk.Button(self.frame_chat, text = 'enviar', state = 'disabled')
         self.botao_envia.grid(row=1, column = 1, sticky = S )
-
 
     def config_opcoes1(self, **kwargs):
         self.opcoes.entryconfigure(0, **kwargs)
@@ -234,7 +205,6 @@ class friendshipRequestsLayout(Toplevel):
         self.frame_contatos = Frame(self)
         self.frame_contatos.grid(row=0, column=0, sticky=N + S, padx=10, pady=10)
 
-
         self.aceptButton = ttk.Button(self.frame_contatos, text='Aceitar contato', state='disabled')
         self.aceptButton.grid(row=1, column=1, sticky='WE', padx=6)
 
@@ -247,10 +217,6 @@ class friendshipRequestsLayout(Toplevel):
         self.contatos_treeview.grid_frame(row=2, column=0, sticky=N + S)
 
 
-
-
-
-
 class ajuda_frame_ui(Toplevel):
     def __init__(self):
         super().__init__()
@@ -259,7 +225,6 @@ class ajuda_frame_ui(Toplevel):
         self.resizable(False, False)
         self.titulo = Label(self, text = 'Ajuda')
         self.titulo.grid(row = 0, column = 0, sticky = E+W)
-
 
         texto = '1) Para login, digite usuário e senha. Ex: usuário: HUGO, senha: 123456'
         self.instru1 = Label(self, text = texto)
@@ -297,7 +262,6 @@ class sobre_frame_ui(Toplevel):
         self.titulo = Label(self, text = 'Sobre')
         self.titulo.grid(row = 0, column = 0, sticky = E+W)
 
-
         texto = 'Trabalho de Redes'
         self.instru1 = Label(self, text = texto)
         self.instru1.grid(row = 1, column = 0, sticky = W, padx = 15, pady = 5)
@@ -329,7 +293,6 @@ class AddFriendFrame(Toplevel):
         self.titulo = Label(self, text = 'Adicionar contato')
         self.titulo.grid(row = 0, column = 0, sticky = N+E+W)
 
-
         self.instru1 = Label(self, text = 'Digite o E-mail do contato:')
         self.instru1.grid(row = 1, column = 0, sticky = W, padx = 15, pady = 5)
 
@@ -343,16 +306,9 @@ class AddFriendFrame(Toplevel):
         self.cancel_button.grid(row = 4, column=0, sticky = E+W, padx = 15, pady = 5)
 
 
-
-
-
-
-
 class c_janelaPrincipal:
-
     def __init__(self, master):
         # Bloco (1) Configurando frame principal(janela-pai):
-        
         self.master = master
         #Comando abaixo configura a resoluação padrão da janela como sendo a resolução do PC em questão:
         #~ self.master.geometry("{}x{}".format(master.winfo_screenwidth(), master.winfo_screenheight()))
@@ -368,7 +324,6 @@ class c_janelaPrincipal:
         self.scroll_win = ScrolledWindow(self.master)#, relief = GROOVE, padx = 10, pady = 4)
 
         self.framePai = self.scroll_win.scrollwindow
-        
         #
         #Fim do Bloco (1)
         #------------------------------------------------------------------------------------------------------------------#
@@ -387,9 +342,7 @@ class c_janelaPrincipal:
         self.menuArquivo.add_command(label="Novo",  command = self.load_file_txt)	
         #Comando abaixo adciona um layout de separação entre as opções do menu:
         self.menuArquivo.add_separator()  #Esse comando adciona um layout de separação entre as opções do menu
-        
-        
-        
+
         #Abaixo a declaração e as Sub-opções dentro da opção "Configurações":
         self.menuConfiguracoes = Menu(self.menuSuperior, tearoff=0)
         self.menuSuperior.add_cascade(menu=self.menuConfiguracoes,label='Ferramentas')
@@ -397,9 +350,7 @@ class c_janelaPrincipal:
         self.menuConfiguracoes.add_command(label="Configurações")
         #Comando abaixo adciona um layout de separação entre as opções do menu:
         self.menuConfiguracoes.add_separator() 
-        
-        
-        
+
         #Abaixo a declaração e as Sub-opções dentro da opção "Ajuda":
         self.menuAjuda = Menu(self.menuSuperior, tearoff=0)
         self.menuSuperior.add_cascade(menu=self.menuAjuda,label='Ajuda')
@@ -408,9 +359,7 @@ class c_janelaPrincipal:
         self.menuAjuda.add_command(label="Sobre")	
         #Comando abaixo adciona um layout de separação entre as opções do menu:
         self.menuAjuda.add_separator()
-        
-        
-        
+
         #Comando que exibe o menu:
         #master.config(menu=self.menuSuperior)
         
@@ -433,15 +382,10 @@ class c_janelaPrincipal:
         #Bloco (3.1): Abaixo, é declarado o frame lateral esquerdo. O frame está contido no frame-pai:
         self.frame_esquerdo = Frame(self.framePai, padx ="4", pady = "4")
         self.frame_esquerdo.grid(row = 0, column=0, sticky = N+S)
-        
-        
-        
+
         #Bloco (3.3): Abaixo, é declarado o frame central. O frame está contido no frame-pai:
         self.frame_central = Frame(self.framePai)#, padx ="4", pady = "4")
         self.frame_central.grid(row = 0, column = 1)#, sticky = N+S+W+E)
-    
-        
-
 
         #Bloco (3.4): Abaixo, é declarado o frame lateral direito. O frame está contido no frame-pai:
         self.frame_direito = Frame(self.framePai, padx ="4", pady = "4")
@@ -471,8 +415,6 @@ class c_janelaPrincipal:
         self.wid_frame_infe = wid_frame(self.wid_frame_infe)
         return(self.wid_frame_infe)
 
-
-
     def pointer_frame_esq(self):
         return(self.frame_esquerdo)
 
@@ -487,8 +429,6 @@ class c_janelaPrincipal:
 
     def pointer_frame_master(self):
         return(self.master)
-
-
 
     def load_file_txt(self):
         #A rotina abaixo abre o .txt, retornando um string, tratando eventuais erros com o encode:
@@ -517,11 +457,8 @@ class c_janelaPrincipal:
         #Abaixo, vamos extrair o nome do texto carregador:
         listaux = filename.split('/')
         nomeTxt = listaux[len(listaux)-1]
-        
-        
+
         return(string, nomeTxt)
-
-
 
     def destroi_framesFilhos(self, frame):
         if  frame.winfo_children() != []:
@@ -533,7 +470,6 @@ class c_janelaPrincipal:
         else:
             return None
 
-
     def ungrid_framesFilhos(self, frame):
         if  frame.winfo_children() != []:
             lst_frames = frame.winfo_children()
@@ -544,21 +480,17 @@ class c_janelaPrincipal:
         else:
             return None
 
-
     def ungrid_framesFilhos_cent(self):
         self.ungrid_framesFilhos(self.frame_central)
     
     def destroi_framesFilhos_cent(self):
         self.destroi_framesFilhos(self.frame_central)
 
-
     def ungrid_framesFilhos_esqr(self):
         self.ungrid_framesFilhos(self.frame_esquerdo)
 
-
     def ungrid_framesFilhos_dire(self):
         self.ungrid_framesFilhos(self.frame_direito)
-
 
     def ungrid_framesFilhos_infe(self):
         self.ungrid_framesFilhos(self.frame_infe)
