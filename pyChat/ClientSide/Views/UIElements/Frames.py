@@ -201,20 +201,21 @@ class chat_frame_ui(Frame):
 class friendshipRequestsLayout(Toplevel):
     def __init__(self):
         super().__init__()
+        self.resizable(False, False)
 
         self.frame_contatos = Frame(self)
-        self.frame_contatos.grid(row=0, column=0, sticky=N + S, padx=10, pady=10)
+        self.frame_contatos.grid(row=0, column=0, sticky=N + S, padx=10, pady=10, ipadx=15, ipady=15)
 
         self.aceptButton = ttk.Button(self.frame_contatos, text='Aceitar contato', state='disabled')
-        self.aceptButton.grid(row=1, column=1, sticky='WE', padx=6)
+        self.aceptButton.grid(row=1, column=1, sticky='NEW', padx=6)
 
         self.blockButton = ttk.Button(self.frame_contatos, text='Bloquear contato', state='disabled')
-        self.blockButton.grid(row=1, column=2, sticky='WE', padx=6)
+        self.blockButton.grid(row=2, column=1, sticky='NEW', padx=6)
 
         self.contatos_treeview = sub_Treeview(self.frame_contatos, num_cols=1, height=20, tit='Pedidos de amizade')
         self.contatos_treeview.config_heading('0', text='Nomes:')
         self.contatos_treeview.config_column('#0', width=150)
-        self.contatos_treeview.grid_frame(row=2, column=0, sticky=N + S)
+        self.contatos_treeview.grid_frame(row=0, column=0, sticky=N+S, rowspan=20)
 
 
 class ajuda_frame_ui(Toplevel):

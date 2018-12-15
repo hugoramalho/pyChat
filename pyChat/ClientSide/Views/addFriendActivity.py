@@ -11,7 +11,6 @@ class addFrame_ui(Frames.AddFriendFrame):
 
         self.add_button.config(command= lambda: self.addFriend())
         self.add_button.bind('<KeyRelease-Return>', lambda event: self.addFriend())
-
         self.friendEmail =''
 
     def addFriend(self):
@@ -28,7 +27,6 @@ class addFrame_ui(Frames.AddFriendFrame):
         self.controller.requestRetrieveFriends()
         self.update()
         self.deiconify()
-
 
     def addFriendNotOk(self):
         self.entr_email.limpa_entr()
