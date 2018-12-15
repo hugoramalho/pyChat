@@ -1,0 +1,4 @@
+*.cpy
+*.pyc
+__pycache__.dir
+.gitnore
